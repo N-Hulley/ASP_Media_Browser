@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 namespace Controller
 {
     /// <summary>
-    /// Refers to how stric the password input should be
-    /// </summary>
+    /// Refers to how strict the password input should be
+    /// </summary> 
     public enum Strictness { NotStrict, Strict, VeryStrict };
     public static class InputValidation
     {
-        
+         
 
         public static void ValidatePassword(String password)
         {

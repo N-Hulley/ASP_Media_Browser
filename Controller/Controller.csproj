@@ -49,6 +49,16 @@
     <Compile Include="UserDTO.cs" />
     <Compile Include="UserManagerImp.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Exceptions\Exceptions.csproj">
+      <Project>{e44ccd59-f402-4eaf-a6ee-69de6f4b42f5}</Project>
+      <Name>Exceptions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{48e4f8e5-2d1b-4bfa-a429-1ec2097f9bfc}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
