@@ -9,7 +9,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{73F1D8DA-F4F1-4238-8737-C34338CD9776}</ProjectGuid>
+    <ProjectGuid>{27C059F4-C22B-4B92-9047-34FBC4009936}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -280,9 +280,9 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Controller\Controller.csproj">
+    <ProjectReference Include="..\Controller\ControllerLayer.csproj">
       <Project>{88477655-3cd8-43c4-b767-055538a76166}</Project>
-      <Name>Controller</Name>
+      <Name>ControllerLayer</Name>
     </ProjectReference>
     <ProjectReference Include="..\Exceptions\Exceptions.csproj">
       <Project>{e44ccd59-f402-4eaf-a6ee-69de6f4b42f5}</Project>
@@ -305,7 +305,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>61107</DevelopmentServerPort>
+          <DevelopmentServerPort>55410</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:61107/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

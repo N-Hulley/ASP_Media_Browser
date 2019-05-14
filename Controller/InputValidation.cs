@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Controller
+namespace ControllerLayer
 {
     /// <summary>
     /// Refers to how strict the password input should be

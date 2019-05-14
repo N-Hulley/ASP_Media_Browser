@@ -7,8 +7,8 @@
     <ProjectGuid>{88477655-3CD8-43C4-B767-055538A76166}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Controller</RootNamespace>
-    <AssemblyName>Controller</AssemblyName>
+    <RootNamespace>ControllerLayer</RootNamespace>
+    <AssemblyName>ControllerLayer</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -46,6 +46,7 @@
     <Compile Include="MediaRow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchMediaManager.cs" />
+    <Compile Include="StaticTest.cs" />
     <Compile Include="UserDTO.cs" />
     <Compile Include="UserManagerImp.cs" />
   </ItemGroup>
