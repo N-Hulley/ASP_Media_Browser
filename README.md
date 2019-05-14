@@ -3,7 +3,7 @@ Nick Hulley
 
 ## Instructions
 
-'''
+```
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
     <configSections>
@@ -14,4 +14,4 @@ Nick Hulley
             providerName="System.Data.SqlClient" />
     </connectionStrings>
 </configuration>
-'''
+```
