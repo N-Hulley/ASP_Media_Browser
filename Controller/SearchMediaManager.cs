@@ -51,5 +51,23 @@ namespace ControllerLayer
             }
             return Output;
         }
+        public IList<MediaRow> MakeMediaQuery()
+        {
+            
+            // Call the model to get matching media
+            Model.ModelDataSet.ViewMediaDataTable MediaRows = new Model.ModelDataSet.ViewMediaDataTable();
+            Model.ModelDataSetTableAdapters.ViewMediaTableAdapter Adapter = new Model.ModelDataSetTableAdapters.ViewMediaTableAdapter();
+            Model.ModelDataSet.ViewMediaDataTable MediaData;
+
+            //MediaData = Adapter.ViewMediaByCriteria(title, genre, director, language, year, budgetLow, budgetHigh);
+
+            // Convert the output to a useable media row.
+            IList<MediaRow> Output = new List<MediaRow>();
+            /*for (int i = 0; i < MediaData.Count; i++)
+            {
+                Output.Add(new MediaRow(MediaData[i]));
+            }*/
+            return Output;
+        }
     }
 }

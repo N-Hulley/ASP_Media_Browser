@@ -22,6 +22,7 @@ namespace ControllerLayer
 
         public Boolean ValidateUser(UserDTO user, string password)
         {
+            return true;/*
             try
             {
                 InputValidation.ValidatePassword(password);
@@ -52,7 +53,7 @@ namespace ControllerLayer
                 return false;
             }
             return CurrentUser;
-
+            */
         }
 
         public UserDTO ValidateUser(string username, string password)
@@ -92,6 +93,11 @@ namespace ControllerLayer
                 throw new Exceptions.DatabaseException("Failed to connect to database.");
             }
             return CurrentUser;
+        }
+
+        UserDTO iUserManager.ValidateUser(UserDTO user, string password)
+        {
+            throw new NotImplementedException();
         }
     }
 }

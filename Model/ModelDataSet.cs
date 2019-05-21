@@ -4,6 +4,10 @@
 
     partial class ModelDataSet
     {
+        partial class TabUserDataTable
+        {
+        }
+
         partial class ViewMediaDataTable
         {
         }

@@ -8,11 +8,10 @@ namespace ControllerLayer
 {
     public class StaticTest
     {
-        public static string ToHex(int value)
+        public static void updateTable()
         {
-            return String.Format("{0:X}", value);
+            Model.CrudFunctions<string, int>.UpdateField("TabUser", "Password", "Hello1", "UID", 3);
         }
-        public static String Test { get; set; } = "asdasdasd";
 
     }
 }

@@ -8,10 +8,7 @@ namespace ControllerLayer
 {
     public interface iUserManager
     {
-        Boolean DeleteUser(UserDTO user, String password)
-        {
-
-        }
+        Boolean DeleteUser(UserDTO user, String password);
         /// <summary>
         /// Validate users login
         /// </summary>

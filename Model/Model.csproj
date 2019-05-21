@@ -41,7 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="CrudFunctions.cs" />
+    <Compile Include="IManageUserRecords.cs" />
     <Compile Include="ModelDataSet.cs">
       <DependentUpon>ModelDataSet.xsd</DependentUpon>
     </Compile>
@@ -56,6 +57,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="UserDTO.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -74,6 +76,12 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Exceptions\Exceptions.csproj">
+      <Project>{e44ccd59-f402-4eaf-a6ee-69de6f4b42f5}</Project>
+      <Name>Exceptions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
