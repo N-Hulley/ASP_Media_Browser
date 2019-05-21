@@ -12,27 +12,23 @@
     @{
         ControllerLayer.iSearchMediaManager searcher = new ControllerLayer.SearchMediaManager();
         IList<ControllerLayer.MediaRow> media = searcher.MakeMediaQuery(" ");
-        for (int i = 0; i < media.Count; i++)
-        {
-            <div class="col-md-4">
-                <div class="card bg-light mb-3" style="max-width: 18rem;">
-                    <div class="card-header">@media[i].Title</div>
-                    <div class="card-body">
-                        <h5 class="card-title">Directed by</h5>
-                        <p class="card-text">@media[i].Director</p>
-                        <h5 class="card-title">Directed by</h5>
-                        <p class="card-text">@media[i].Language</p>
-                        <h5 class="card-title">Genre</h5>
-                        <p class="card-text">@media[i].Genre</p>
-                        <h5 class="card-title">Released</h5>
-                        <p class="card-text">@media[i].Year</p>
+        <ul class="list-unstyled ml-2">
+            @for (int i = 0; i < media.Count; i++)
+            {
+            <li class="media my-2">
+                <img src="https://image.flaticon.com/icons/png/128/83/83519.png" class="mr-3 align-self-start px-1" style="width:64px; height:64px;" alt="" />
+                <div class="media-body">
+                    <h5 class="mt-0 mb-1">@media[i].Title</h5>
+                    <div class="">
+                        Directed by <span class="director">@media[i].Director</span>,
+                        Language: <span class="director">@media[i].Language</span>,
+                        Genre: <span class="director">@media[i].Genre</span>,
+                        Released in <span class="director">@media[i].Year</span>
                     </div>
                 </div>
-                <h2></h2>
-                <p>
-                </p>
-            </div>
-        }
+                </li>
+            }
+        </ul>
     }
-    
-</div>
+
+    </div>

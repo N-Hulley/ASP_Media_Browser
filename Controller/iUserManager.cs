@@ -8,6 +8,10 @@ namespace ControllerLayer
 {
     public interface iUserManager
     {
+        Boolean DeleteUser(UserDTO user, String password)
+        {
+
+        }
         /// <summary>
         /// Validate users login
         /// </summary>
@@ -22,6 +26,7 @@ namespace ControllerLayer
         /// <param name="password">Password of the user</param>
         /// <returns>A instance of the User class containing the users information</returns>
         UserDTO ValidateUser(String username, String password);
+        UserDTO ValidateUser(UserDTO user, String password);
 
         /// <summary>
         /// Register a new user

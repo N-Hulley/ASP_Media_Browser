@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    public class Class1
+    public class UserDTO
     {
+        public int UID { get; set; }
+        public String UserName { get; set; }
+        public int MyProperty { get; set; }
     }
 }
