@@ -42,7 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CrudFunctions.cs" />
-    <Compile Include="IManageUserRecords.cs" />
+    <Compile Include="DTO\DirectorDTO.cs" />
+    <Compile Include="DTO\GenreDTO.cs" />
+    <Compile Include="DTO\LanguageDTO.cs" />
+    <Compile Include="Managers\IManageMediaRecords.cs" />
+    <Compile Include="Managers\IManageUserRecords.cs" />
+    <Compile Include="DTO\MediaDTO.cs" />
     <Compile Include="ModelDataSet.cs">
       <DependentUpon>ModelDataSet.xsd</DependentUpon>
     </Compile>
@@ -57,7 +62,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="UserDTO.cs" />
+    <Compile Include="DTO\UserDTO.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -10,7 +10,10 @@ namespace ControllerLayer
     {
         public static void updateTable()
         {
-            Model.CrudFunctions<string, int>.UpdateField("TabUser", "Password", "Hello1", "UID", 3);
+            //Model.CrudFunctions.UpdateField("TabUser", "Password", "Hello1", "UID", 3);
+
+            Model.MediaDTO test = new Model.MediaDTO("TestMovie", "", 3, "", 3, "", 3, 2000, 100);
+            Model.CrudFunctions.Create(test);
         }
 
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ControllerLayer
 {
-    public class MediaRow
+    public class MediaDTO
     {
         public String Title { get; set; }
         public String Genre { get; set; }
@@ -20,7 +20,7 @@ namespace ControllerLayer
         /// Constructor function that copys a media row
         /// </summary>
         /// <param name="mediaRow"></param>
-        public MediaRow(Model.ModelDataSet.ViewMediaRow mediaRow)
+        public MediaDTO(Model.ModelDataSet.ViewMediaRow mediaRow)
         {
             Title = mediaRow.Title;
             Genre = mediaRow.GenreName;

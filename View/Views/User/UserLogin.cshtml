@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "UserLogin";
+}
+
+<h2>UserLogin</h2>
+
+@model View.Models.UserDTO
+
+@using (Html.BeginForm("LoginUser","UserController",FormMethod.Post))
+{
+    @Html.LabelFor(m => m.Username, "User Name")
+    @Html.TextBoxFor(m => m.Password)
+    <br />
+    @Html.LabelFor(m => m.Username, "Password")
+    @Html.TextBoxFor(m => m.Password)
+
+}

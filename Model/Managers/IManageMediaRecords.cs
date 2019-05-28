@@ -4,10 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ControllerLayer
+namespace Model
 {
-    public interface iSearchMediaManager
+    interface IManageMediaRecords
     {
+        bool AddRecord();
+        IList<MediaDTO> Search();
+        bool ChangeRecord();
+
         IList<MediaDTO> MakeMediaQuery
         (
             String title = null,

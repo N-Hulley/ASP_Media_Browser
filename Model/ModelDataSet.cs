@@ -4,6 +4,7 @@
 
     partial class ModelDataSet
     {
+
         partial class TabUserDataTable
         {
         }

@@ -21,7 +21,7 @@ namespace ControllerLayer
         /// <param name="budgetLow"></param>
         /// <param name="budgetHigh"></param>
         /// <returns></returns>
-        public IList<MediaRow> MakeMediaQuery(String title, String genre, String director, String language, int? year ,decimal? budgetLow, decimal? budgetHigh)
+        public IList<MediaDTO> MakeMediaQuery(String title, String genre, String director, String language, int? year ,decimal? budgetLow, decimal? budgetHigh)
         {
             // add % signs to all valid inputs so that the whole string is searched for
             if (title != null)
@@ -44,14 +44,14 @@ namespace ControllerLayer
             MediaData = Adapter.ViewMediaByCriteria(title, genre, director, language, year, budgetLow, budgetHigh);
 
             // Convert the output to a useable media row.
-            IList<MediaRow> Output = new List<MediaRow>();
+            IList<MediaDTO> Output = new List<MediaDTO>();
             for (int i = 0; i < MediaData.Count; i++)
             {
-                Output.Add(new MediaRow(MediaData[i]));
+                Output.Add(new MediaDTO(MediaData[i]));
             }
             return Output;
         }
-        public IList<MediaRow> MakeMediaQuery()
+        public IList<MediaDTO> MakeMediaQuery()
         {
             
             // Call the model to get matching media
@@ -62,7 +62,7 @@ namespace ControllerLayer
             //MediaData = Adapter.ViewMediaByCriteria(title, genre, director, language, year, budgetLow, budgetHigh);
 
             // Convert the output to a useable media row.
-            IList<MediaRow> Output = new List<MediaRow>();
+            IList<MediaDTO> Output = new List<MediaDTO>();
             /*for (int i = 0; i < MediaData.Count; i++)
             {
                 Output.Add(new MediaRow(MediaData[i]));

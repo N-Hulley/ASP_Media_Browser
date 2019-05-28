@@ -10,7 +10,7 @@ namespace Model
     {
         Model.UserDTO ValidateUser(string username, string password);
         Boolean DeleteUser(string username, string password);
-        Boolean UpdatePassword(string fieldName, T value);
+        Boolean UpdatePassword(string oldPassword, string newPassword);
 
     }
 }
