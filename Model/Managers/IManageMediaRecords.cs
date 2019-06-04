@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    interface IManageMediaRecords
+    public interface IManageMediaRecords
     {
-        bool AddRecord();
+        MediaDTO AddRecord(MediaDTO record);
         IList<MediaDTO> Search();
-        bool ChangeRecord();
+        bool ChangeRecord(MediaDTO record, string Field, string Value);
 
-        IList<MediaDTO> MakeMediaQuery
+        IList<MediaDTO> Search
         (
             String title = null,
             String genre = null,
             String director = null,
             String language = null,
-            int? year = null,
-            decimal? budgetLow = null,
-            decimal? budgetHigh = null
+            int? year = null
         );
+
+
     }
 }

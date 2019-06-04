@@ -16,6 +16,10 @@ namespace Model
             GID = gID;
             GenreName = genreName;
         }
+        public GenreDTO(string genreName)
+        {
+            GenreName = genreName;
+        }
 
     }
 }

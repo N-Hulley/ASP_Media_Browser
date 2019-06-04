@@ -1,35 +1,93 @@
 ﻿@{
-    ViewBag.Title = "Home";
-    ControllerLayer.StaticTest.updateTable();
+    ViewBag.Title = "Home Page";
+    View.Controllers.HomeController context = new View.Controllers.HomeController();
+
 }
+@model View.Models.UserDTO
 
-<div class="jumbotron">
-    <h1>Movies</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
 
-<div class="row">
-    @{
-        ControllerLayer.iSearchMediaManager searcher = new ControllerLayer.SearchMediaManager();
-        IList<ControllerLayer.MediaDTO> media = searcher.MakeMediaQuery(" ");
-        <ul class="list-unstyled ml-2">
-            @for (int i = 0; i < media.Count; i++)
+<!--Grid row-->
+<div class="row wow fadeIn">
+
+    <!--Grid column-->
+    <div class="col-md-6 mb-4 white-text text-center text-md-left">
+
+        <h1 class="display-4 font-weight-bold">ASP.NET Media Browser</h1>
+
+        <hr class="hr-light">
+
+
+        <p class="mb-4 d-none d-md-block">
+            <strong>
+                Search for media
+            </strong>
+        </p>
+        @{
+            if (!context.UserLoggedIn())
             {
-            <li class="media my-2">
-                <img src="https://image.flaticon.com/icons/png/128/83/83519.png" class="mr-3 align-self-start px-1" style="width:64px; height:64px;" alt="" />
-                <div class="media-body">
-                    <h5 class="mt-0 mb-1">@media[i].Title</h5>
-                    <div class="">
-                        Directed by <span class="director">@media[i].Director</span>,
-                        Language: <span class="director">@media[i].Language</span>,
-                        Genre: <span class="director">@media[i].Genre</span>,
-                        Released in <span class="director">@media[i].Year</span>
-                    </div>
-                </div>
-                </li>
+                <a target="_blank" href="" class="btn btn-primary">
+                    Register
+                </a>
             }
-        </ul>
-    }
+            else
+            {
+                @Html.ActionLink("Search", "Search", "Home", new { @class = "btn btn-primary" })
+
+            }
+        }
 
     </div>
+    @{
+        if (!context.UserLoggedIn())
+        {
+            <div class="col-md-6 col-xl-5 mb-4">
+
+                <!--Card-->
+                <div class="card">
+
+                    <!--Card content-->
+                    <div class="card-body">
+
+                        <!-- Form -->
+
+
+                        @using (Html.BeginForm("Login", "Home", FormMethod.Post))
+                        {
+                    <!-- Heading -->
+                            <h3 class="dark-grey-text text-center">
+                                <strong>Sign In</strong>
+                            </h3>
+                            <hr>
+
+                            <div class="md-form">
+                                <i class="fas fa-user prefix grey-text"></i>
+                                @Html.TextBoxFor(m => m.Username, null, new { placeholder = "Username", @class = "form-control w-100" })
+                            </div>
+                            <div class="md-form">
+                                <i class="fas fa-key prefix grey-text"></i>
+                                @Html.TextBoxFor(m => m.Password, null, new { placeholder = "Password", type = "password", @class = "form-control w-100" })
+                            </div>
+                            if (Session["LoginError"] != null)
+                            {
+                                <span class="text-danger mb-2">@(((View.Models.LoginError)Session["LoginError"]).ErrorMessage)</span>
+                            }
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-indigo">Submit</button>
+                            </div>
+
+                        }
+                        <!-- Form -->
+
+                    </div>
+
+                </div>
+                <!--/.Card-->
+
+            </div>
+        }
+    }
+    <!--Grid column-->
+
+</div>
+<!--Grid row-->

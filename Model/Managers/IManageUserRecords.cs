@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    public interface IManageUserRecords<T>
+    public interface IManageUserRecords
     {
         Model.UserDTO ValidateUser(string username, string password);
         Boolean DeleteUser(string username, string password);
-        Boolean UpdatePassword(string oldPassword, string newPassword);
+        bool UpdatePassword(UserDTO user, string newPassword);
+
+        UserDTO RegisterUser(Model.UserDTO userDetales);
 
     }
 }

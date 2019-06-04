@@ -9,7 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControllerLayer", "Controll
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{48E4F8E5-2D1B-4BFA-A429-1EC2097F9BFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "View", "View\View.csproj", "{27C059F4-C22B-4B92-9047-34FBC4009936}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "View", "View\View.csproj", "{ACE907B7-F25A-49FC-9EF0-521ADE3A826A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBrowserWSService", "MediaBrowserWSService\MediaBrowserWSService.csproj", "{4FCE3441-4C66-447C-923B-6935CFA80E50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,12 +31,19 @@ Global
 		{48E4F8E5-2D1B-4BFA-A429-1EC2097F9BFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48E4F8E5-2D1B-4BFA-A429-1EC2097F9BFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48E4F8E5-2D1B-4BFA-A429-1EC2097F9BFC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{27C059F4-C22B-4B92-9047-34FBC4009936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{27C059F4-C22B-4B92-9047-34FBC4009936}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{27C059F4-C22B-4B92-9047-34FBC4009936}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{27C059F4-C22B-4B92-9047-34FBC4009936}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACE907B7-F25A-49FC-9EF0-521ADE3A826A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACE907B7-F25A-49FC-9EF0-521ADE3A826A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACE907B7-F25A-49FC-9EF0-521ADE3A826A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACE907B7-F25A-49FC-9EF0-521ADE3A826A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FCE3441-4C66-447C-923B-6935CFA80E50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FCE3441-4C66-447C-923B-6935CFA80E50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FCE3441-4C66-447C-923B-6935CFA80E50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FCE3441-4C66-447C-923B-6935CFA80E50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EB4A1D38-4BED-419B-9B64-3D64FE430DA2}
 	EndGlobalSection
 EndGlobal

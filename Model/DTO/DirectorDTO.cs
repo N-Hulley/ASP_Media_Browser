@@ -13,7 +13,10 @@ namespace Model
             DID = dID;
             DirectorName = directorName;
         }
-
+        public DirectorDTO(string directorName)
+        {
+            DirectorName = directorName;
+        }
         public int DID { get; set; }
         public string DirectorName { get; set; }
     }

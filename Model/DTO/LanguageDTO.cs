@@ -8,6 +8,11 @@ namespace Model
 {
     public class LanguageDTO
     {
+        public LanguageDTO(string languageName)
+        {
+            LanguageName = languageName;
+        }
+
         public LanguageDTO(int lID, string languageName)
         {
             LID = lID;

@@ -23,13 +23,12 @@ namespace ControllerLayer
         /// <param name="password">Password of the user</param>
         /// <returns>A instance of the User class containing the users information</returns>
         UserDTO ValidateUser(String username, String password);
-        UserDTO ValidateUser(UserDTO user, String password);
 
         /// <summary>
         /// Register a new user
         /// </summary>
         /// <param name="userDTO"></param>
         /// <returns></returns>
-        UserDTO RegisterNewUser(UserDTO userDTO);
+        UserDTO RegisterNewUser(UserDTO userDTO, string password);
     }
 }

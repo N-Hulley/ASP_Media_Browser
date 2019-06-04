@@ -9,24 +9,24 @@ namespace ControllerLayer
     public class MediaDTO
     {
         public String Title { get; set; }
-        public String Genre { get; set; }
-        public String Director { get; set; }
-        public String Language { get; set; }
+        public GenreDTO Genre { get; set; }
+        public DirectorDTO Director { get; set; }
+        public LanguageDTO Language { get; set; }
         public int Year { get; set; }
         public String Budget { get; set; }
-        public Decimal BudgetValue { get; set; }
+        public decimal BudgetValue { get; set; }
 
         /// <summary>
         /// Constructor function that copys a media row
         /// </summary>
         /// <param name="mediaRow"></param>
-        public MediaDTO(Model.ModelDataSet.ViewMediaRow mediaRow)
+        public MediaDTO(Model.MediaDTO mediaRow)
         {
             Title = mediaRow.Title;
-            Genre = mediaRow.GenreName;
-            Director = mediaRow.DirectorName;
-            Language = mediaRow.LanguageName;
-            Year = mediaRow.PublishYear;
+            Genre = new GenreDTO(mediaRow.Genre);
+            Language = new LanguageDTO(mediaRow.Language);
+            Director = new DirectorDTO(mediaRow.Director);
+            Year = mediaRow.Year;
             BudgetValue = mediaRow.Budget * 1000000;
 
             if (mediaRow.Budget > 1)

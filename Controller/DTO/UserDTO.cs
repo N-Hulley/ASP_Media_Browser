@@ -18,11 +18,20 @@ namespace ControllerLayer
         /// <param name="username"></param>
         /// <param name="email"></param>
         /// <param name="userLevel"></param>
-        public UserDTO(String username, String email, int userLevel)
+        public UserDTO(Model.UserDTO user)
         {
-            this.Username = username;
-            this.Email = email;
-            this.UserLevel = userLevel;
+            this.Username = user.UserName;
+            this.Email = user.UserEmail;
+            this.UserLevel = user.UserLevel;
+        }
+        public Model.UserDTO Translate(string password)
+        {
+            return new Model.UserDTO(
+                this.Username,
+                password,
+                this.UserLevel,
+                this.Email
+            );
         }
     }
 }

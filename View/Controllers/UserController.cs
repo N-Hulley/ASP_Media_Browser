@@ -4,13 +4,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace View.Models
+namespace View.Controllers
 {
     public class UserController : Controller
     {
-        ActionResult LoginUser(UserDTO user)
-        {
-            return View();
-        }
+        
     }
 }

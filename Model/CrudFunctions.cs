@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    public class CrudFunctions
+    class CrudFunctions
     {
-        private static string connectionDetales = "Data Source=SQL5020.site4now.net;Initial Catalog = DB_9AB8B7_B19ES7077; User ID = DB_9AB8B7_B19ES7077_admin; Password=qbES4uQW";
-        private static SqlConnection openConnection() {
+        private static string ConnectionDetales = "Data Source=SQL5020.site4now.net;Initial Catalog = DB_9AB8B7_B19ES7077; User ID = DB_9AB8B7_B19ES7077_admin; Password=qbES4uQW";
+        private static SqlConnection OpenConnection() {
             try
             {
-                SqlConnection Connection = new SqlConnection(connectionDetales);
+                SqlConnection Connection = new SqlConnection(ConnectionDetales);
                 Connection.Open();
                 return Connection;
             } catch (Exception)
@@ -22,7 +22,7 @@ namespace Model
                 throw new Exceptions.DatabaseException("Failed to connect to Database");
             }
         }
-        private static void closeConnection(SqlConnection connection)
+        private static void CloseConnection(SqlConnection connection)
         {
             try
             {
@@ -33,68 +33,90 @@ namespace Model
                 throw new Exceptions.DatabaseException("Failed to connect to Database");
             }
         }
-        public static Boolean Create(UserDTO user, string password)
+        public static int Delete(string table, IDictionary<string, object> conditions = null, bool useLike = false)
         {
-            const string tableName = "TabUser";
-            IDictionary<string, object> values = new Dictionary<string, object>();
-            
-            values["Password"] = password;
-            values["UserName"] = user.UserName;
-            values["UserLevel"] = user.UserLevel;
-            values["UserEmail"] = user.UserEmail;
-
-            bool userCreated = false;
-
-            using (SqlConnection connection = openConnection())
+            using (SqlConnection connection = OpenConnection())
             {
-
-                string sqlInsertInto = "";
-                string sqlInsertIntoValues = "";
-                for (int i = 0; i < values.Count; i++)
+                string sqlWhereFields = conditions.Count > 0 ? " WHERE " : "";
+                for (int i = 0; i < conditions.Count; i++)
                 {
-                    sqlInsertInto += "'" + values.ElementAt(i).Key + "'";
 
-                    bool isString = values.ElementAt(i).Value.Equals(typeof(String));
+                    bool insertLike = conditions.ElementAt(i).Value is string && useLike;
+                    sqlWhereFields += conditions.ElementAt(i).Key + (insertLike ? " LIKE " : " = ");
 
-                    sqlInsertIntoValues += (isString ? "'" : "") + "@"  + values.ElementAt(i).Key + (isString ? "'" : "");
 
-                    if (i < values.Count - 1)
+                    sqlWhereFields += "@" + conditions.ElementAt(i).Key;
+                    //sqlInsertIntoValues += "?";
+                    if (i < conditions.Count - 1)
                     {
-                        sqlInsertInto += ", ";
+                        sqlWhereFields += " AND ";
                     }
                 }
 
-                String Query = " INSERT INTO " + tableName + " (" + sqlInsertInto + ") VALUES (" + sqlInsertIntoValues + ")";
+                SqlCommand command = connection.CreateCommand();
+
+                command.CommandText = "DELETE FROM " + table + sqlWhereFields;
+
+                for (int i = 0; i < conditions.Count; i++)
+                {
+                    bool insertLike = conditions.ElementAt(i).Value is string && useLike;
+                    string insertString = insertLike ? $"%{(string)conditions.ElementAt(i).Value}%" : (string)conditions.ElementAt(i).Value;
+
+                    command.Parameters.AddWithValue("@" + conditions.ElementAt(i).Key, insertString);
+                }
+                int output = command.ExecuteNonQuery();
+                CloseConnection(connection);
+                return output;
+            }
+        }
+
+        public static DataTable Read(string table, IDictionary<string, object> conditions = null, bool useLike = false)
+        {
+            DataTable output = new DataTable();
+
+
+            using (SqlConnection connection = OpenConnection())
+            {
+                string sqlWhereFields = conditions.Count > 0 ? " WHERE " : "";
+                for ( int i = 0; i < conditions.Count; i++)
+                {
+
+                    bool insertLike = conditions.ElementAt(i).Value is string && useLike;
+                    sqlWhereFields += conditions.ElementAt(i).Key + (insertLike ? " LIKE " : " = ");
+
+
+                    sqlWhereFields += "@" + conditions.ElementAt(i).Key;
+                    //sqlInsertIntoValues += "?";
+                    if (i < conditions.Count - 1)
+                    {
+                        sqlWhereFields += " AND ";
+                    }
+                }
 
                 SqlCommand command = connection.CreateCommand();
 
-                for (int i = 0; i < values.Count; i++)
+                command.CommandText = "SELECT * FROM " + table + sqlWhereFields;
+
+                for (int i = 0; i < conditions.Count; i++)
                 {
-                    command.Parameters.AddWithValue("@" + values.ElementAt(i).Key, values.ElementAt(i).Value);
+                    bool insertLike = conditions.ElementAt(i).Value is string && useLike;
+                    string insertString = insertLike ? $"%{(string)conditions.ElementAt(i).Value}%" : (string)conditions.ElementAt(i).Value;
+                   
+                    command.Parameters.AddWithValue("@" + conditions.ElementAt(i).Key, insertString);
                 }
 
-                userCreated = command.ExecuteNonQuery() > 0;
-                
-                closeConnection(connection);
+                SqlDataAdapter Adapter = new SqlDataAdapter(command);
+                Adapter.Fill(output);
+                CloseConnection(connection);
             }
-            return userCreated;
+
+            return output;
         }
-
-        public static Boolean Create(MediaDTO media)
+        public static int Create(string idName, IDictionary<string, object> values, string tableName)
         {
-            const string tableName = "TabMedia";
-            IDictionary<string, object> values = new Dictionary<string, object>();            
 
-            values["Title"] = media.Title;
-            values["Genre"] = media.Genre.GID;
-            values["Director"] = media.Director.DID;
-            values["Language"] = media.Language.LID;
-            values["PublishYear"] = media.Year;
-            values["Budget"] = media.Budget;
-            
-            bool userCreated = false;
-
-            using (SqlConnection connection = openConnection())
+            int modified;
+            using (SqlConnection connection = OpenConnection())
             {
 
                 string sqlInsertInto = "";
@@ -105,7 +127,10 @@ namespace Model
 
                     bool isString = values.ElementAt(i).Value is string;
 
-                    sqlInsertIntoValues += (isString ? "'" : "") + "@" + values.ElementAt(i).Key + (isString ? "'" : "");
+                    if (isString) sqlInsertIntoValues += "'";
+                    sqlInsertIntoValues +=  "@" + values.ElementAt(i).Key;
+                    if (isString) sqlInsertIntoValues += "'";
+
                     //sqlInsertIntoValues += "?";
                     if (i < values.Count - 1)
                     {
@@ -114,37 +139,62 @@ namespace Model
                     }
                 }
 
-                String Query = "INSERT INTO " + tableName + " (" + sqlInsertInto + ") VALUES (" + sqlInsertIntoValues + ")";
+                String Query = "INSERT INTO " + tableName + " (" + sqlInsertInto + ") output INSERTED." + idName + " VALUES (" + sqlInsertIntoValues + ")";
                 
                 SqlCommand command = connection.CreateCommand();
                 command.CommandText = Query;
                 for (int i = 0; i < values.Count; i++)
                 {
+                    bool isString = values.ElementAt(i).Value is string;
                     command.Parameters.AddWithValue("@" + values.ElementAt(i).Key, values.ElementAt(i).Value);
                 }
 
-                userCreated = command.ExecuteNonQuery() > 0;
+                modified = (int)command.ExecuteScalar();
 
-                closeConnection(connection);
+                CloseConnection(connection);
             }
-            return userCreated;
+            return modified;
         }
 
-        private static Boolean UpdateField(string table, string fieldName, object value, string whereField, object whereValue) {
-            
-            using (SqlConnection connection = openConnection())
+        public static Boolean UpdateField(string table, string fieldName, object value, IDictionary<string, object> parameters = null)
+        {
+            bool Success = false;
+
+            using (SqlConnection connection = OpenConnection())
             {
-                
+                string sqlWhereFields = " WHERE ";
+                for (int i = 0; i < parameters.Count; i++)
+                {
+                    sqlWhereFields += parameters.ElementAt(i).Key + " = ";
+
+                    bool isString = parameters.ElementAt(i).Value is string;
+
+                    if (isString) sqlWhereFields += "'";
+                    sqlWhereFields += "@" + parameters.ElementAt(i).Key;
+                    if (isString) sqlWhereFields += "'";
+                    //sqlInsertIntoValues += "?";
+                    if (i < parameters.Count - 1)
+                    {
+                        sqlWhereFields += " AND ";
+                    }
+                }
+
                 SqlCommand command = connection.CreateCommand();
 
-                command.CommandText = "UPDATE " + table + " SET " + fieldName + "='" + value + "' WHERE  = @whereValue; ";
-                command.Parameters.AddWithValue("@whereValue", whereValue);
-                
+;
+                command.CommandText = "UPDATE " + table + " SET " + fieldName + " = " + (value is string ? "'" : "") + value + (value is string ? "'" : "") + sqlWhereFields;
+
+                for (int i = 0; i < parameters.Count; i++)
+                {
+                    command.Parameters.AddWithValue("@" + parameters.ElementAt(i).Key, parameters.ElementAt(i).Value);
+                }
+
                 command.ExecuteNonQuery();
-                closeConnection(connection);
+                Success = true;
+                CloseConnection(connection);
             }
             
-            return false;
+            return Success;
         }
 
         

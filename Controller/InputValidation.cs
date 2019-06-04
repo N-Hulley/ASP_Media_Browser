@@ -17,8 +17,13 @@ namespace ControllerLayer
 
         public static void ValidatePassword(String password)
         {
+            if (password == null)
+            {
+                throw new Exceptions.ValidationException("Please fill in the Password");
+
+            }
             /// This is how strct the password is. 
-            int StrictnessLevel = (int)Strictness.Strict;
+            int StrictnessLevel = (int)Strictness.NotStrict;
 
             if (StrictnessLevel == (int)Strictness.NotStrict) return;
 
@@ -46,7 +51,12 @@ namespace ControllerLayer
         }
         public static void ValidateUsername(String username)
         {
-            if (username.Length < 3)
+            if (username == null)
+            {
+                throw new Exceptions.ValidationException("Please fill in the Username");
+
+            }
+             if (username.Length < 3)
                 throw new Exceptions.ValidationException("Username must be at least 3 characters long");
 
             if (username.Length > 15)

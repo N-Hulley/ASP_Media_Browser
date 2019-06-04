@@ -8,12 +8,27 @@ namespace ControllerLayer
 {
     public class StaticTest
     {
+        public static void login()
+        {
+            iUserManager RecordManager = new UserManagerImp();
+
+            UserDTO newUser = RecordManager.ValidateUser("admin", "Hello1");
+            
+
+        }
         public static void updateTable()
         {
-            //Model.CrudFunctions.UpdateField("TabUser", "Password", "Hello1", "UID", 3);
 
-            Model.MediaDTO test = new Model.MediaDTO("TestMovie", "", 3, "", 3, "", 3, 2000, 100);
-            Model.CrudFunctions.Create(test);
+            Model.DirectorDTO director = new Model.DirectorDTO(3, "Sam");
+            Model.GenreDTO genre = new Model.GenreDTO(3, "Action");
+            Model.LanguageDTO language = new Model.LanguageDTO(3, "French");
+
+            Model.MediaDTO test = new Model.MediaDTO("ABCD",genre, director, language, 2000, 100);
+
+            Model.IManageMediaRecords RecordManager = new Model.ManageMediaRecordsImp();
+            RecordManager.AddRecord(test);
+            
+
         }
 
     }

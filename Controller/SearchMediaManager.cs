@@ -23,31 +23,15 @@ namespace ControllerLayer
         /// <returns></returns>
         public IList<MediaDTO> MakeMediaQuery(String title, String genre, String director, String language, int? year ,decimal? budgetLow, decimal? budgetHigh)
         {
-            // add % signs to all valid inputs so that the whole string is searched for
-            if (title != null)
-                title = "%" + title + "%";
+            IList<MediaDTO> Output = new List<MediaDTO>();
 
-            if (genre != null)
-                genre = "%" + genre + "%";
-
-            if (director != null)
-                director = "%" + director + "%";
-
-            if (language != null)
-                language = "%" + language + "%";
-            
-            // Call the model to get matching media
-            Model.ModelDataSet.ViewMediaDataTable MediaRows = new Model.ModelDataSet.ViewMediaDataTable();
-            Model.ModelDataSetTableAdapters.ViewMediaTableAdapter Adapter = new Model.ModelDataSetTableAdapters.ViewMediaTableAdapter();
-            Model.ModelDataSet.ViewMediaDataTable MediaData;
-
-            MediaData = Adapter.ViewMediaByCriteria(title, genre, director, language, year, budgetLow, budgetHigh);
+            Model.IManageMediaRecords RecordManager = new Model.ManageMediaRecordsImp();
+            IList<Model.MediaDTO> results = RecordManager.Search(title, genre, director, language, year);
 
             // Convert the output to a useable media row.
-            IList<MediaDTO> Output = new List<MediaDTO>();
-            for (int i = 0; i < MediaData.Count; i++)
+            for (int i = 0; i < results.Count; i++)
             {
-                Output.Add(new MediaDTO(MediaData[i]));
+                Output.Add(new MediaDTO(results[i]));
             }
             return Output;
         }
@@ -55,9 +39,6 @@ namespace ControllerLayer
         {
             
             // Call the model to get matching media
-            Model.ModelDataSet.ViewMediaDataTable MediaRows = new Model.ModelDataSet.ViewMediaDataTable();
-            Model.ModelDataSetTableAdapters.ViewMediaTableAdapter Adapter = new Model.ModelDataSetTableAdapters.ViewMediaTableAdapter();
-            Model.ModelDataSet.ViewMediaDataTable MediaData;
 
             //MediaData = Adapter.ViewMediaByCriteria(title, genre, director, language, year, budgetLow, budgetHigh);
 
