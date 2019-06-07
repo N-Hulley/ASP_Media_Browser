@@ -1,39 +1,71 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@model View.Models.MediaDTO
 
-<div class="col-md-12">
 
-    <!--Card-->
-    <div class="card">
+    <div class="d-flex flex-center w-100">
+        <div class="col-md-12 col-xl-5 mb-4 ">
 
-        <!--Card content-->
-        <div class="card-body d-flex flex-center flex-column">
+            <!--Card-->
+            <div class="card">
 
-            <!-- Form -->
-            <!-- Heading -->
-            <h3 class="dark-grey-text text-center">
-                <strong>Search For Media</strong>
-            </h3>
+                <!--Card content-->
+                <div class="card-body">
 
-            <!-- Material input -->
-            <div class="def-number-input number-input safari_only d-flex flex-center">
-                <label>Release Year</label>
-                <input class="quantity" min="0" name="quantity" value="2000" type="number">
+                    <!-- Form -->
+                    <div class="text-center w-100">
+                        <div id="showLoad">
+                        </div>
+                    </div>
+                    <div id="formSubmitHide">
+                        @using (Html.BeginForm("SearchMedia", "Home", FormMethod.Post))
+                        {
+                            <!-- Heading -->
+                            <h3 class="dark-grey-text text-center">
+                                <strong>Search For Media</strong>
+                            </h3>
+                            <hr>
+
+                            <div class="md-form">
+                                @Html.TextBoxFor(m => m.Title, null, new { placeholder = "Title", @class = "form-control w-100" })
+                            </div>
+                            <div class="md-form">
+                                @Html.TextBoxFor(m => m.Director, null, new { placeholder = "Director", @class = "form-control w-100" })
+                            </div>
+                            <div class="md-form">
+                                @Html.TextBoxFor(m => m.Language, null, new { placeholder = "Language", @class = "form-control w-100" })
+                            </div>
+                            <div class="md-form">
+                                @Html.TextBoxFor(m => m.Year, null, new { placeholder = "Year", @class = "form-control w-100" })
+                            </div>
+                            <div class="md-form">
+                                @Html.TextBoxFor(m => m.Genre, null, new { placeholder = "Genre", @class = "form-control w-100" })
+                            </div>
+                            <div class="md-form">
+                                @Html.TextBoxFor(m => m.BudgetValue, null, new { placeholder = "Budget ($)", @class = "form-control w-100" })
+                            </div>
+
+
+                            <div class="text-center">
+                                <button type="submit" onclick="hideSearch();" class="btn btn-indigo" id="searchButton">Search</button>
+                                <div class="loadIcon"></div>
+                            </div>
+
+                        }
+                        <!-- Form -->
+                    </div>
+                </div>
+
             </div>
-
-            
-            <div class="text-center">
-                <button type="submit" class="btn btn-indigo">Go</button>
-            </div>
-
-
-            <!-- Form -->
+            <!--/.Card-->
 
         </div>
-
     </div>
-    <!--/.Card-->
-
-</div>
-
+    <script>
+    $(".loadIcon").hide();
+    $(".loadIcon").html(`<img src="@Url.Content("~/img/load.gif")" style="width:200px; height:200px" />`);
+    function hideSearch() {
+        $("#searchButton").hide();
+    }
+    </script>

@@ -14,9 +14,12 @@ namespace ControllerLayer
             String genre = null,
             String director = null,
             String language = null,
-            int? year = null,
-            decimal? budgetLow = null,
-            decimal? budgetHigh = null
+            int? year = null
         );
+
+        MediaDTO ChangeMedia(MediaDTO newMedia, string field, object value);
+        bool DeleteMedia(MediaDTO mediaInput);
+        MediaDTO CreateMedia(MediaDTO mediaInput);
+
     }
 }

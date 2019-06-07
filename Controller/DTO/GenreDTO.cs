@@ -24,6 +24,10 @@ namespace ControllerLayer
         {
             GenreName = genreName;
         }
+        public Model.GenreDTO Translate()
+        {
+            return new Model.GenreDTO(GID, GenreName);
+        }
 
     }
 }

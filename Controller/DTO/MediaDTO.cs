@@ -8,6 +8,7 @@ namespace ControllerLayer
 {
     public class MediaDTO
     {
+        public int MediaID { get; set; }
         public String Title { get; set; }
         public GenreDTO Genre { get; set; }
         public DirectorDTO Director { get; set; }
@@ -22,21 +23,41 @@ namespace ControllerLayer
         /// <param name="mediaRow"></param>
         public MediaDTO(Model.MediaDTO mediaRow)
         {
+            MediaID = mediaRow.MediaID;
             Title = mediaRow.Title;
             Genre = new GenreDTO(mediaRow.Genre);
             Language = new LanguageDTO(mediaRow.Language);
             Director = new DirectorDTO(mediaRow.Director);
             Year = mediaRow.Year;
-            BudgetValue = mediaRow.Budget * 1000000;
-
-            if (mediaRow.Budget > 1)
+            this.SetBudget(mediaRow.Budget * 1000000);
+            
+        }
+        public void SetBudget(decimal budget)
+        {
+            this.BudgetValue = budget;
+            budget /= 1000000;
+            if (budget > 1)
             {
-                Budget = (int)mediaRow.Budget + " Million";
+                Budget = (int)budget + " Million";
             }
             else
             {
-                Budget = (int)(mediaRow.Budget * 1000) + " Thousand";
+                Budget = (int)(budget * 1000) + " Thousand";
             }
+        }
+        public Model.MediaDTO Translate()
+        {
+            Model.MediaDTO Output = new Model.MediaDTO(
+                this.Title,
+                this.Genre.Translate(),
+                this.Director.Translate(),
+                this.Language.Translate(),
+                this.Year,
+                this.BudgetValue / 1000000
+                );
+
+            return Output;
+
         }
     }
 }

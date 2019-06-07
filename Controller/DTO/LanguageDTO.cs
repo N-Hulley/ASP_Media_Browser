@@ -26,5 +26,9 @@ namespace ControllerLayer
 
         public int LID { get; set; }
         public string LanguageName { get; set; }
+        public Model.LanguageDTO Translate()
+        {
+            return new Model.LanguageDTO(LID, LanguageName);
+        }
     }
 }

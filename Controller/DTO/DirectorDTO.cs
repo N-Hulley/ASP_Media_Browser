@@ -24,5 +24,9 @@ namespace ControllerLayer
         }
         public int DID { get; set; }
         public string DirectorName { get; set; }
+        public Model.DirectorDTO Translate()
+        {
+            return new Model.DirectorDTO(DID, DirectorName);
+        }
     }
 }

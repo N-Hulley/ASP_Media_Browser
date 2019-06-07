@@ -23,11 +23,10 @@ namespace Model
             values["Budget"] = record.Budget;
 
             record.MediaID = CrudFunctions.Create("MediaID", values, table);
-            ChangeRecord(record, "Title", "NEW TITLE");
             return record;
         }
 
-        public bool ChangeRecord(MediaDTO record, string Field, string Value)
+        public bool ChangeRecord(MediaDTO record, string Field, object Value)
         {
             IDictionary<string, object> conditions = new Dictionary<string, object>();
 
@@ -37,6 +36,15 @@ namespace Model
             return true;
         }
 
+        public bool DeleteRecord(MediaDTO record)
+        {
+            IDictionary<string, object> conditions = new Dictionary<string, object>();
+
+            conditions["MediaID"] = record.MediaID;
+
+            return CrudFunctions.Delete(table, conditions) > 0;
+
+        }
 
         public IList<MediaDTO> Search()
         {

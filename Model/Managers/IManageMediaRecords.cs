@@ -10,7 +10,7 @@ namespace Model
     {
         MediaDTO AddRecord(MediaDTO record);
         IList<MediaDTO> Search();
-        bool ChangeRecord(MediaDTO record, string Field, string Value);
+        bool ChangeRecord(MediaDTO record, string Field, object Value);
 
         IList<MediaDTO> Search
         (
@@ -20,6 +20,7 @@ namespace Model
             String language = null,
             int? year = null
         );
+        bool DeleteRecord(MediaDTO record);
 
 
     }

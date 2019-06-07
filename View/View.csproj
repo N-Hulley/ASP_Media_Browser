@@ -125,7 +125,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\DirectorDTO.cs" />
+    <Compile Include="Models\GenreDTO.cs" />
+    <Compile Include="Models\LanguageDTO.cs" />
     <Compile Include="Models\LoginError.cs" />
+    <Compile Include="Models\MediaDTO.cs" />
     <Compile Include="Models\UserDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -179,6 +183,7 @@
     <Content Include="img\lightbox\default-skin.png" />
     <Content Include="img\lightbox\default-skin.svg" />
     <Content Include="img\lightbox\preloader.gif" />
+    <Content Include="img\load.gif" />
     <Content Include="img\overlays\01.png" />
     <Content Include="img\overlays\02.png" />
     <Content Include="img\overlays\03.png" />
@@ -252,9 +257,13 @@
     <Content Include="Views\Home\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MediaBrowserWSService\MediaBrowserWSService.csproj">
+    <ProjectReference Include="..\MediaBrowserWSService\MediaService.csproj">
+      <Project>{1a932ff1-f324-4957-a8f2-d515c6985eab}</Project>
+      <Name>MediaService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UserWSService\UserWSService.csproj">
       <Project>{4fce3441-4c66-447c-923b-6935cfa80e50}</Project>
-      <Name>MediaBrowserWSService</Name>
+      <Name>UserWSService</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

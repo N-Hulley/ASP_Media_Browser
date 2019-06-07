@@ -6,11 +6,21 @@ using System.Web.Mvc;
 
 namespace View.Controllers
 {
+    
     public class HomeController : Controller
     {
+        
+        UserWSService.IUserLoginService LoginService = new UserWSService.UserLoginServiceImp();
+        
+        private System.Web.SessionState.HttpSessionState GetSession()
+        {
+            return System.Web.HttpContext.Current.Session;
+        }
         public bool UserLoggedIn()
         {
-            return Session["validUser"] != null;
+           
+            if (GetSession()["validUser"] != null) return true;
+            return false;
         }
         public static string currentPage = "";
         public ActionResult Index()
@@ -23,31 +33,39 @@ namespace View.Controllers
         {
             
             currentPage = "Search";
-            ViewBag.Message = "Your Search page.";
+            ViewBag.Message = "Search.";
 
             return UserLoggedIn() ? View() : View("index");
         }
-        ControllerLayer.iUserManager UserManager = new ControllerLayer.UserManagerImp();
+        public ActionResult SearchMedia(Models.MediaDTO searchParameters)
+        {
+            currentPage = "Results";
+            ViewBag.Message = "Your Search page.";
+
+            return UserLoggedIn() ? View("Search") : View("index");
+        }
 
         public ActionResult Login(Models.UserDTO user)
         {
-            ControllerLayer.UserDTO ValidUser;
+
+            UserWSService.UserWSDTO ValidUser;
+          
             try
-            {
-                ValidUser = UserManager.ValidateUser(user.Username, user.Password);
-                Session["LoginError"] = null;
-                Session["validUser"] = ValidUser;
+            {                
+                ValidUser = LoginService.ValidateUser(Translate(user));
+                if (ValidUser.IsValid)
+                {
+                    Session["LoginError"] = null;
+                    Session["validUser"] = ValidUser;
+                } else
+                {
+                    throw new Exception(ValidUser.ErrorMessage);
+                }
             }
-            catch (Exceptions.DatabaseException e)
+            catch (Exception e)
             {
                 Session["LoginError"] = new Models.LoginError(e.Message);
-                return View("Index");
-            }
-            catch (Exceptions.ValidationException e)
-            {
-                Session["LoginError"] = new Models.LoginError(e.Message);
-                return View("Index");
-            }
+            } 
             return View("Index");
         }
 
@@ -56,6 +74,14 @@ namespace View.Controllers
             ViewBag.Message = "Your Search page.";
 
             return View();
+        }
+        
+        private UserWSService.UserWSDTO Translate(View.Models.UserDTO user)
+        {
+            UserWSService.UserWSDTO Output = new UserWSService.UserWSDTO();
+            Output.Username = user.Username;
+            Output.Password = user.Password;
+            return Output;
         }
         public ActionResult Signout()
         {

@@ -30,5 +30,8 @@ namespace ControllerLayer
         /// <param name="userDTO"></param>
         /// <returns></returns>
         UserDTO RegisterNewUser(UserDTO userDTO, string password);
+
+        UserDTO UpdatePassword(UserDTO user, string oldPassword, string newPassword);
+        
     }
 }

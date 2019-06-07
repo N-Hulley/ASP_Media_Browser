@@ -8,7 +8,7 @@ namespace Model.Managers
 {
     class ReocrdManagerHelper
     {
-        private static string table = "TabMedia";
+        //private static string table = "TabMedia";
 
     }
 }

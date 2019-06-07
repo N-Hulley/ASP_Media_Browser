@@ -9,6 +9,7 @@ namespace ControllerLayer
 {
     public class UserManagerImp : iUserManager
     {
+        Model.IManageUserRecords Manager = new Model.ManageUserRecordsImp();
         public bool DeleteUser(UserDTO user, string password)
         {
             Model.IManageUserRecords Manager = new Model.ManageUserRecordsImp();
@@ -21,7 +22,6 @@ namespace ControllerLayer
             InputValidation.ValidatePassword(password);
 
             UserDTO ValidatedUser;
-            Model.IManageUserRecords Manager = new Model.ManageUserRecordsImp();
 
             try
             {
@@ -42,6 +42,34 @@ namespace ControllerLayer
             return ValidatedUser;
         }
 
+        public UserDTO UpdatePassword(UserDTO user, string oldPassword, string newPassword)
+        {
+            try
+            {
+                InputValidation.ValidatePassword(oldPassword);
+            } catch (Exceptions.ValidationException e)
+            {
+                throw new Exceptions.ValidationException("Old Password: " + e.Message);
+            }
+            try
+            {
+                InputValidation.ValidatePassword(newPassword);
+            }
+            catch (Exceptions.ValidationException e)
+            {
+                throw new Exceptions.ValidationException("New Password: " + e.Message);
+            }
+
+            if (Manager.UpdatePassword(user.Translate(oldPassword), newPassword))
+            {
+                return user;
+            }
+            else
+            {
+                throw new Exceptions.ValidationException("Password is incorrect");
+            }
+         }
+
         public UserDTO ValidateUser(string username, string password)
         {
             // Validate username and password
@@ -53,8 +81,7 @@ namespace ControllerLayer
 
             try
             {
-                Model.IManageUserRecords UserManager = new Model.ManageUserRecordsImp();
-                CurrentUser = UserManager.ValidateUser(username, password);
+                CurrentUser = Manager.ValidateUser(username, password);
             }
             catch (Exceptions.ValidationException e)
             {
