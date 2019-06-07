@@ -1,0 +1,76 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model MediaService.MediaWSDTO
+
+@{bool IsAdmin = false;}
+<div class="d-flex flex-center w-100 mt-2">
+    <div class="col-md-12 ">
+
+        <!--Card-->
+        <div class="card" style="margin-top:80px; margin-bottom:80px;">
+            <div class="card-body">
+                <!--Table-->
+                <!--Table head-->
+                <!--Table body-->
+                <!--Table body-->
+                <!--Table-->
+                <!--Card content-->
+                @{
+                    if (Session["SearchResults"] == null)
+                    {
+                        <span class="text-danger mb-2">No Results Found</span>
+                        @Html.ActionLink("Search Again", "Search", "Home", new { @class = "btn btn-primary" })
+                    }
+                    else
+                    {
+                        IList<MediaService.MediaWSDTO> media = ((List<MediaService.MediaWSDTO>)Session["SearchResults"]);
+                        <table id="tablePreview" class="table">
+                            <!--Table head-->
+                            <thead>
+                                <tr>
+                                    @{ if (IsAdmin)
+                                        {
+                                            <th>ID</th>
+                                        }
+                                    }
+                                    <th>Title</th>
+                                    <th>Director</th>
+                                    <th>Genre</th>
+                                    <th>Language</th>
+                                    <th>Budget ($US)</th>
+                                    <th>Release Year</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ for (int i = 0; i < media.Count; i++)
+                                    {
+                                        <tr>
+                                            @{ if (IsAdmin)
+                                                {
+                                                    <th scope="row">@media[i].MediaID</th>
+                                                }
+                                            }
+                                            <th>@media[i].Title</th>
+                                            <th>@media[i].Director.DirectorName</th>
+                                            <th>@media[i].Genre.GenreTitle</th>
+                                            <th>@media[i].Language.LanguageName</th>
+                                            <th>@media[i].Budget <span> ($@media[i].BudgetValue)</span></th>
+                                            <th>@media[i].Year</th>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    }
+                }
+
+            </div>
+        </div>
+
+    </div>
+    <!--/.Card-->
+
+</div>
+                </div>

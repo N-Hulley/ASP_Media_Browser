@@ -9,16 +9,14 @@ namespace View.Controllers
     
     public class HomeController : Controller
     {
-        
         UserWSService.IUserLoginService LoginService = new UserWSService.UserLoginServiceImp();
-        
+        MediaService.IMediaService MediaService = new MediaService.MediaServiceImp();
         private System.Web.SessionState.HttpSessionState GetSession()
         {
             return System.Web.HttpContext.Current.Session;
         }
         public bool UserLoggedIn()
         {
-           
             if (GetSession()["validUser"] != null) return true;
             return false;
         }
@@ -26,7 +24,6 @@ namespace View.Controllers
         public ActionResult Index()
         {
             currentPage = "Home";
-
             return View();
         }
         public ActionResult Search()
@@ -42,7 +39,14 @@ namespace View.Controllers
             currentPage = "Results";
             ViewBag.Message = "Your Search page.";
 
-            return UserLoggedIn() ? View("Search") : View("index");
+            Session["SearchResults"] = MediaService.MakeQuery(
+                searchParameters.Title,
+                searchParameters.Genre,
+                searchParameters.Director,
+                searchParameters.Language,
+                searchParameters.Year
+                ) ;
+            return UserLoggedIn() ? View("SearchResults") : View("index");
         }
 
         public ActionResult Login(Models.UserDTO user)

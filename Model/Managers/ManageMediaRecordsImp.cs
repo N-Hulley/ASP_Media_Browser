@@ -64,7 +64,8 @@ namespace Model
             if (language != null)
                 conditions["LanguageName"] = language;
             if (year != null)
-                conditions["PublishYear"] = year;
+                if (year > 0)
+                    conditions["PublishYear"] = year;
 
             return Translate(CrudFunctions.Read(view, conditions, true));
         }

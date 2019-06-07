@@ -100,7 +100,7 @@ namespace Model
                 for (int i = 0; i < conditions.Count; i++)
                 {
                     bool insertLike = conditions.ElementAt(i).Value is string && useLike;
-                    string insertString = insertLike ? $"%{(string)conditions.ElementAt(i).Value}%" : (string)conditions.ElementAt(i).Value;
+                    object insertString = insertLike ? $"%{(string)conditions.ElementAt(i).Value}%" : conditions.ElementAt(i).Value;
                    
                     command.Parameters.AddWithValue("@" + conditions.ElementAt(i).Key, insertString);
                 }
