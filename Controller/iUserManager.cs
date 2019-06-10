@@ -32,6 +32,6 @@ namespace ControllerLayer
         UserDTO RegisterNewUser(UserDTO userDTO, string password);
 
         UserDTO UpdatePassword(UserDTO user, string oldPassword, string newPassword);
-        
+        IList<UserDTO> ListUsers(int? id = null);
     }
 }

@@ -23,9 +23,9 @@ namespace UserWSService
         [OperationContract]
         UserWSDTO RegisterNewUser(UserWSDTO user);
 
-        bool DeleteUser(UserWSDTO user);
-
+        bool DeleteUser(UserWSService.UserWSDTO user, int iD);
         UserWSDTO Translate(ControllerLayer.UserDTO user);
+        IList<UserWSDTO> GetUsers(UserWSDTO user, int? iD = null);
 
 
         // TODO: Add your service operations here
@@ -42,6 +42,7 @@ namespace UserWSService
         string email = null;
         string errorMessage = null;
         int? userLevel = null;
+        int? uID = null;
 
 
 
@@ -84,5 +85,8 @@ namespace UserWSService
             set { email = value; }
             get { return email; }
         }
+
+        [DataMember]
+        public int? UID { get => uID; set => uID = value; }
     }
 }

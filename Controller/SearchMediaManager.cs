@@ -13,6 +13,7 @@ namespace ControllerLayer
         private readonly Model.IManageMediaRecords RecordManager = new Model.ManageMediaRecordsImp();
         private readonly Model.IManageUserRecords UserManager = new Model.ManageUserRecordsImp();
 
+
         public int AddDirector(string name)
         {
             return RecordManager.AddDirector(name);

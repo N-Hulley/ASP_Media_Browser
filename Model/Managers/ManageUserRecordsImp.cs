@@ -73,15 +73,33 @@ namespace Model
                 throw new Exceptions.ValidationException("Username or Password was incorrect");
 
         }
+        public IList<UserDTO> Translate(DataTable records)
+        {
+            IList<UserDTO> DTOs = new List<UserDTO>();
+            foreach (DataRow row in records.Rows)
+            {
+                DTOs.Add(Translate(row));
+            }
+            return DTOs;
+        }
         public UserDTO Translate(DataRow userRecord)
         {
             return new UserDTO(
                 userRecord.Field<string>("UserName"),
                 userRecord.Field<string>("Password"),
                 userRecord.Field<int>("UserLevel"),
-                userRecord.Field<string>("UserEmail")
+                userRecord.Field<string>("UserEmail"),
+                userRecord.Field<int>("UID")
                 );
         }
 
+        public IList<UserDTO> ListUsers(int? id = null)
+        {
+            IDictionary<string, object> Parameters = new Dictionary<string, object>();
+
+            if (id != null) Parameters["UID"] = id; else Parameters["1"] = 1;
+
+            return Translate(CrudFunctions.Read(table, Parameters));
+        }
     }
 }

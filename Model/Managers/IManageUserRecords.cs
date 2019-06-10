@@ -10,9 +10,10 @@ namespace Model
     {
         Model.UserDTO ValidateUser(string username, string password);
         Boolean DeleteUser(string username, string password);
+        IList<UserDTO> ListUsers(int? id = null);
         bool UpdatePassword(UserDTO user, string newPassword);
 
         UserDTO RegisterUser(Model.UserDTO userDetales);
-
+        
     }
 }

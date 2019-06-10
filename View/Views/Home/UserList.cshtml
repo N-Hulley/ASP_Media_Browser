@@ -3,3 +3,105 @@
 }
 
 
+@{bool IsAdmin = Session["ValidUser"] == null ? false : ((UserWSService.UserWSDTO)(Session["ValidUser"])).UserLevel >= 3 ? true : false;}
+<div class="d-flex flex-center w-100 mt-2">
+    <div class="col-md-12 ">
+
+        <!--Card-->
+        <div class="card" style="margin-top:80px; margin-bottom:80px;">
+            <div class="card-body">
+                    <table id="media" class="table">
+                        <!--Table head-->
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>UserLevel</th>
+                                <th>UserEmail</th>
+                                <th>AdminFunctions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr id="insertNew"><!--
+                                <form class="md-form" id="add" onsubmit="return addField(event)">
+                                    <td><i style="color:limegreen;" class="fas fa-plus"></i></td>
+                                    <td><input name="" id="name" type="text" class="form-control w-100" /></td>
+                                    <td><input name="" id="level" type="text" class="form-control w-100" /></td>
+                                    <td><input name="" id="email" type="text" class="form-control w-100" /></td>
+                                    <td><input type="submit" class="w-100 mt-1 btn btn-success btn-sm" value="Add" /></td>
+                                </form>
+                            --></tr>
+
+                        </tbody>
+                    </table>
+
+
+            </div>
+        </div>
+
+    </div>
+    <!--/.Card-->
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script>
+    config.useIds = true;
+    var load = `<img src="@Url.Content("~/img/load.gif")" style="width:50px; height:50px" />`;
+
+    $.ajax({
+        type: 'POST',
+        url: "@Url.Action("GetUsers", "Home")",
+        datatype: "html",
+        success: function (data) {
+            console.log(data);
+            for (let i = 0; i < data.Response.length; i++) {
+                $("#insertNew").before(
+                    `
+                    <tr id="${data.Response[i].UID}" >
+                        <td>
+                            ${data.Response[i].UID}
+                        </td>
+                        <td>
+                            ${data.Response[i].Username}
+                        </td>
+                        <td>
+                            ${data.Response[i].UserLevel}
+                        </td>
+                        <td>
+                            ${data.Response[i].Email}
+                        </td>
+                        <td>
+                            <input type="button" class="w-100 mb-1 btn btn-danger btn-sm" value="Delete" onclick="return deleteField(${data.Response[i].GID});" />
+                        </td>
+                    </tr>
+                `
+                );
+            }
+        },
+        fail: function (xhr, textStatus, errorThrown) {
+            alert('Failed to get Users from Database');
+        }
+    });
+
+    function deleteField(id) {
+        var beforeHtml = $("#" + id).html();
+        $("#" + id).html(load);
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("ChangeOtherField", "Home")",
+            datatype: "html",
+            data: { "command" : "DELETE", "ID" : id, "currentType" : "user" },
+            success: function (data) {
+                console.log(data);
+                if (data.Success) {
+                    $("#" + id).html(`<td colspan="3"><span class="text-danger mr-2 w-100">Deleted ${data.Affected[0]}</span></td>`);
+                } else {
+                    $("#" + id).html(beforeHtml);
+                    $("#" + id).before(`<tr><td colspan="3"><span class="text-danger mr-2 w-100">Failed to delete ${data.Affected[0]}</span></td></tr>`);
+                }
+            }
+        });
+        return false;
+    }
+</script>

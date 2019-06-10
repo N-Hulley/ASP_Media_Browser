@@ -8,12 +8,13 @@ namespace Model
 {
     public class UserDTO
     {
-        public UserDTO(string userName, string password, int userLevel, string userEmail)
+        public UserDTO(string userName, string password, int userLevel, string userEmail, int uID)
         {
             UserName = userName;
             Password = password;
             UserLevel = userLevel;
             UserEmail = userEmail;
+            UID = uID;
         }
         
 

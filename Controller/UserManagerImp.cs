@@ -16,6 +16,17 @@ namespace ControllerLayer
             return Manager.DeleteUser(user.Username, password);
         }
 
+        public IList<UserDTO> ListUsers(int? id = null)
+        {
+            IList<UserDTO> Translated = new List<UserDTO>();
+            IList<Model.UserDTO> Users = Manager.ListUsers(id);
+            for (int i = 0; i < Users.Count; i++)
+            {
+                Translated.Add(new UserDTO(Users[i]));
+            }
+            return Translated;
+        }
+
         public UserDTO RegisterNewUser(UserDTO user, string password)
         {
             // Validate username and password

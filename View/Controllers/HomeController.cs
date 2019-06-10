@@ -70,6 +70,10 @@ namespace View.Controllers
                 {
                     Session["LoginError"] = null;
                     Session["validUser"] = ValidUser;
+                    if (ValidUser.UserLevel >= 3)
+                    {
+                        return Admin();
+                    }
                 }
                 else
                 {
@@ -89,13 +93,32 @@ namespace View.Controllers
 
             return View("Register");
         }
+        public ActionResult RegisterAccount(View.Models.UserDTO user)
+        {
+            try
+            {
+                LoginService.RegisterNewUser(Translate(user));
+                return Login(user);
+            } catch (Exception e)
+            {
+                Session["RegisterError"] = new View.Models.LoginError(e.Message);
+                return View("Register");
+            }
 
+        }
         private UserWSService.UserWSDTO Translate(View.Models.UserDTO user)
         {
             UserWSService.UserWSDTO Output = new UserWSService.UserWSDTO();
-            Output.Username = user.Username;
-            Output.Password = user.Password;
-            return Output;
+            if (user.Username != null && user.Password != null)
+            {
+                Output.Username = user.Username;
+                Output.Password = user.Password;
+                return Output;
+            }
+            else
+            {
+                throw new Exception("Username or password was not given");
+            }
         }
 
         public ActionResult Signout()
@@ -220,6 +243,12 @@ namespace View.Controllers
             result["Response"] = MediaManager.GetLanguages(GetUser());
             return Json(result);
         }
+        public JsonResult GetUsers()
+        {
+            IDictionary<string, object> result = new Dictionary<string, object>();
+            result["Response"] = LoginService.GetUsers(GetUser());
+            return Json(result);
+        }
         public ActionResult Directors()
         {
             if (IsAdmin())
@@ -244,6 +273,7 @@ namespace View.Controllers
             }
             return Index();
         }
+
         public JsonResult AddField(string name, string currentType)
         {
             if (IsAdmin())
@@ -286,6 +316,7 @@ namespace View.Controllers
                             case "director": result["Affected"] = MediaManager.GetDirectors(user, currentID); break;
                             case "genre": result["Affected"] = MediaManager.GetGenres(user, currentID); break;
                             case "language": result["Affected"] = MediaManager.GetLanguages(user, currentID); break;
+                            case "user": result["Affected"] = LoginService.GetUsers(user, currentID); break;
                         }
 
                         if (command == "EDIT")
@@ -299,6 +330,7 @@ namespace View.Controllers
                                 case "director": result["Success"] = MediaManager.DeleteDirector(user, currentID); break;
                                 case "genre": result["Success"] = MediaManager.DeleteGenre(user, currentID); break;
                                 case "language": result["Success"] = MediaManager.DeleteLanguage(user, currentID); break;
+                                case "user": result["Success"] = LoginService.DeleteUser(user, currentID); break;
                             }
                         }
                     }

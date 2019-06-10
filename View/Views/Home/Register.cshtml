@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div id="formSubmitHide">
-                    @using (Html.BeginForm("Register", "Home", FormMethod.Post))
+                    @using (Html.BeginForm("RegisterAccount", "Home", FormMethod.Post))
                     {
                         <!-- Heading -->
                         <h3 class="dark-grey-text text-center">
@@ -38,10 +38,10 @@
                         <div class="md-form">
                             @Html.TextBoxFor(m => m.Password, null, new { placeholder = "Password", @class = "form-control w-100" })
                         </div>
-                        <div class="md-form">
-                            @Html.TextBoxFor(m => m.Password, null, new { placeholder = "Confirm Password", @class = "form-control w-100" })
-                        </div>
-
+                        if (Session["RegisterError"] != null)
+                        {
+                            <span class="text-danger mb-2">@(((View.Models.LoginError)Session["RegisterError"]).ErrorMessage)</span>
+                        }
 
                         <div class="text-center">
                             <button type="submit" onclick="hideLogin();" class="btn btn-indigo" id="register">Register</button>

@@ -8,6 +8,7 @@ namespace ControllerLayer
 {
     public class UserDTO
     {
+        public int UID { get; set; }
         public String Username { get; set; }
         public String Email { get; set; }
         public int UserLevel { get; set; }
@@ -22,6 +23,7 @@ namespace ControllerLayer
         /// <param name="userLevel"></param>
         public UserDTO(Model.UserDTO user)
         {
+            this.UID = user.UID;
             this.isValid = true;
             this.Username = user.UserName;
             this.Email = user.UserEmail;
@@ -33,8 +35,10 @@ namespace ControllerLayer
                 this.Username,
                 password,
                 this.UserLevel,
-                this.Email
+                this.Email,
+                this.UID
             );
         }
+        public UserDTO(string email, string password, string username) { }
     }
 }
