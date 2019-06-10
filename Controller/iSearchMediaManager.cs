@@ -18,8 +18,22 @@ namespace ControllerLayer
         );
 
         MediaDTO ChangeMedia(MediaDTO newMedia, string field, object value);
-        bool DeleteMedia(MediaDTO mediaInput);
+        bool DeleteMedia( MediaDTO mediaInput);
         MediaDTO CreateMedia(MediaDTO mediaInput);
+        MediaDTO FindByID(int iD);
 
+
+        IList<GenreDTO> GetGenres(int? iD = null);
+        IList<DirectorDTO> GetDirectors(int? iD = null);
+        IList<LanguageDTO> GetLanguages(int? iD = null);
+
+
+        bool DeleteDirector(int iD);
+        bool DeleteLanguage(int iD);
+        bool DeleteGenre(int iD);
+
+        int AddDirector(string name);
+        int AddLanguage(string name);
+        int AddGenere(string name);
     }
 }

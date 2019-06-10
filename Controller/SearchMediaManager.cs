@@ -9,8 +9,25 @@ namespace ControllerLayer
 {
     public class SearchMediaManager : iSearchMediaManager
     {
-        Model.IManageMediaRecords RecordManager = new Model.ManageMediaRecordsImp();
-        Model.IManageUserRecords UserManager = new Model.ManageUserRecordsImp();
+        const int AdminLevel = 3;
+        private readonly Model.IManageMediaRecords RecordManager = new Model.ManageMediaRecordsImp();
+        private readonly Model.IManageUserRecords UserManager = new Model.ManageUserRecordsImp();
+
+        public int AddDirector(string name)
+        {
+            return RecordManager.AddDirector(name);
+        }
+
+        public int AddGenere(string name)
+        {
+            return RecordManager.AddGenre(name);
+        }
+
+        public int AddLanguage(string name)
+        {
+            return RecordManager.AddLanguage(name);
+        }
+
         public MediaDTO ChangeMedia(MediaDTO media, string field, object newValue)
         {
             if (field == "Title" && newValue is string)
@@ -51,9 +68,65 @@ namespace ControllerLayer
             return new MediaDTO(RecordManager.AddRecord(mediaInput.Translate()));
         }
 
-        public bool DeleteMedia(MediaDTO mediaInput)
+        public bool DeleteDirector(int iD)
         {
-            return RecordManager.DeleteRecord(mediaInput.Translate());
+            return RecordManager.DeleteDirector(iD);
+        }
+
+        public bool DeleteGenre(int iD)
+        {
+            return RecordManager.DeleteGenre(iD);
+        }
+
+        public bool DeleteLanguage(int iD)
+        {
+            return RecordManager.DeleteLanguage(iD);
+        }
+
+        public bool DeleteMedia( MediaDTO mediaInput)
+        {
+            if (mediaInput != null)
+                return RecordManager.DeleteRecord(mediaInput.Translate());
+            return false;
+        }
+
+        public MediaDTO FindByID(int iD)
+        {
+            return new MediaDTO(RecordManager.FindByID(iD));
+
+        }
+
+        public IList<DirectorDTO> GetDirectors(int? iD = null)
+        {
+            IList<Model.DirectorDTO> response = (RecordManager.GetDirectors(iD));
+            IList<DirectorDTO> translated = new List<DirectorDTO>();
+            for (int i = 0; i < response.Count; i++)
+            {
+                translated.Add(new DirectorDTO(response[i]));
+            }
+            return translated;
+        }
+
+        public IList<GenreDTO> GetGenres(int? iD = null)
+        {
+            IList<Model.GenreDTO> response = (RecordManager.GetGenres(iD));
+            IList<GenreDTO> translated = new List<GenreDTO>();
+            for (int i = 0; i < response.Count; i++)
+            {
+                translated.Add(new GenreDTO(response[i]));
+            }
+            return translated;
+        }
+
+        public IList<LanguageDTO> GetLanguages(int? iD = null)
+        {
+            IList<Model.LanguageDTO> response = (RecordManager.GetLanguages(iD));
+            IList<LanguageDTO> translated = new List<LanguageDTO>();
+            for (int i = 0; i < response.Count; i++)
+            {
+                translated.Add(new LanguageDTO(response[i]));
+            }
+            return translated;
         }
 
         /// <summary>

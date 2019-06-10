@@ -21,6 +21,7 @@ namespace ControllerLayer
         /// Constructor function that copys a media row
         /// </summary>
         /// <param name="mediaRow"></param>
+
         public MediaDTO(Model.MediaDTO mediaRow)
         {
             MediaID = mediaRow.MediaID;
@@ -30,8 +31,21 @@ namespace ControllerLayer
             Director = new DirectorDTO(mediaRow.Director);
             Year = mediaRow.Year;
             this.SetBudget(mediaRow.Budget * 1000000);
-            
+
         }
+
+        public MediaDTO(string title, GenreDTO genre, DirectorDTO director, LanguageDTO language, int year, decimal budgetValue, int? mediaID = null)
+        {
+            if (mediaID != null) MediaID = (int)mediaID;
+            Title = title;
+            Genre = genre;
+            Director = director;
+            Language = language;
+            Year = year;
+            this.SetBudget(budgetValue);
+
+        }
+
         public void SetBudget(decimal budget)
         {
             this.BudgetValue = budget;
@@ -48,6 +62,7 @@ namespace ControllerLayer
         public Model.MediaDTO Translate()
         {
             Model.MediaDTO Output = new Model.MediaDTO(
+                this.MediaID,
                 this.Title,
                 this.Genre.Translate(),
                 this.Director.Translate(),

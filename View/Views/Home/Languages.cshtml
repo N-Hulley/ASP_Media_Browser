@@ -1,0 +1,136 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model MediaService.MediaWSDTO
+
+
+@{bool IsAdmin = Session["ValidUser"] == null ? false : ((UserWSService.UserWSDTO)(Session["ValidUser"])).UserLevel >= 3 ? true : false;}
+<div class="d-flex flex-center w-100 mt-2">
+    <div class="col-md-12 ">
+
+        <!--Card-->
+        <div class="card" style="margin-top:80px; margin-bottom:80px;">
+            <div class="card-body">
+                <!--Table-->
+                <!--Table head-->
+                <!--Table body-->
+                <!--Table body-->
+                <!--Table-->
+                <!--Card content-->
+                @{
+
+                    <table id="media" class="table">
+                        <!--Table head-->
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Admin Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr id="insertNew">
+                                <form class="md-form" id="add" onsubmit="return addField(event)">
+                                    <td><i style="color:limegreen;" class="fas fa-plus"></i></td>
+                                    <td><input name="" id="name" type="text" class="form-control w-100" /></td>
+                                    <td><input type="submit" class="w-100 mt-1 btn btn-success btn-sm" value="Add" /></td>
+                                </form>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                }
+
+
+            </div>
+        </div>
+
+    </div>
+    <!--/.Card-->
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script>
+    config.useIds = true;
+    var load = `<img src="@Url.Content("~/img/load.gif")" style="width:50px; height:50px" />`;
+
+    $.ajax({
+        type: 'POST',
+        url: "@Url.Action("GetLanguages", "Home")",
+        datatype: "html",
+        success: function (data) {
+            console.log(data);
+            for (let i = 0; i < data.Response.length; i++) {
+                $("#insertNew").before(
+                    `
+                    <tr id="${data.Response[i].LID}" >
+                        <td>
+                            ${data.Response[i].LID}
+                        </td>
+                        <td>
+                            ${data.Response[i].LanguageName}
+                        </td>
+                        <td>
+                            <input type="button" class="w-100 mb-1 btn btn-danger btn-sm" value="Delete" onclick="return deleteField(${data.Response[i].LID});" />
+                        </td>
+                    </tr>
+                `
+                );
+            }
+        },
+        fail: function (xhr, textStatus, errorThrown) {
+            alert('Failed to get Language from Database');
+        }
+    });
+
+    function deleteField(id) {
+        var beforeHtml = $("#" + id).html();
+        $("#" + id).html(load);
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("ChangeOtherField", "Home")",
+            datatype: "html",
+            data: { "command" : "DELETE", "ID" : id, "currentType" : "language" },
+            success: function (data) {
+                console.log(data);
+                if (data.Success) {
+                    $("#" + id).html(`<td colspan="3"><span class="text-danger mr-2 w-100">Deleted ${data.Affected[0].LanguageName}</span></td>`);
+                } else {
+                    $("#" + id).html(beforeHtml);
+                    $("#" + id).before(`<tr><td colspan="3"><span class="text-danger mr-2 w-100">Failed to delete ${data.Affected[0].LanguageName}</span></td></tr>`);
+                }
+            }
+        });
+        return false;
+    }
+    function addField(e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("AddField", "Home")",
+            data: { "name": $("#name").val(), "currentType" : "language"},
+            success: function (data) {
+                console.log(data);
+                 $("#insertNew").before(
+                     `
+                    <tr id="${data.Affected[0].LID}" >
+                        <td>
+                            ${data.Affected[0].LID}
+                        </td>
+                        <td>
+                            ${data.Affected[0].LanguageName}
+                        </td>
+                        <td>
+                            <input type="button" class="w-100 mb-1 btn btn-danger btn-sm" value="Delete" onclick="return deleteField(${data.Affected[0].LID});" />
+                        </td>
+                    </tr>
+                `
+                );
+                }
+        });
+        return false;
+        }
+</script>

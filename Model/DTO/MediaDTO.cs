@@ -18,8 +18,9 @@ namespace Model
         public int Year { get; set; }
         public decimal Budget { get; set; }
 
-        public MediaDTO(string title, GenreDTO genre, DirectorDTO director, LanguageDTO language, int year, decimal budget)
+        public MediaDTO(int mediaID, string title, GenreDTO genre, DirectorDTO director, LanguageDTO language, int year, decimal budget)
         {
+            MediaID = mediaID;
             Title = title;
             Genre = genre;
             Director = director;

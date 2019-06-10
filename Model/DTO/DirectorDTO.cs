@@ -6,18 +6,15 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    public class DirectorDTO
+    public class DirectorDTO : GenericDTO
     {
-        public DirectorDTO(int dID, string directorName)
-        {
-            DID = dID;
-            DirectorName = directorName;
-        }
-        public DirectorDTO(string directorName)
-        {
-            DirectorName = directorName;
-        }
-        public int DID { get; set; }
-        public string DirectorName { get; set; }
+        public DirectorDTO(string directorName) : base(directorName)
+        {}
+        
+        public DirectorDTO(int dID, string directorName) : base(dID, directorName)
+        {}
+
+        public string DirectorName { get => Name; set => Name = value; }
+        public int DID { get => ID; set => ID = value; }
     }
 }

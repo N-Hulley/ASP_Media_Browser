@@ -1,22 +1,16 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    View.Controllers.HomeController context = new View.Controllers.HomeController();
 }
 
 @model MediaService.MediaWSDTO
 
-@{bool IsAdmin = false;}
+
+@{bool IsAdmin = Session["ValidUser"] == null ? false : ((UserWSService.UserWSDTO)(Session["ValidUser"])).UserLevel >= 3 ? true : false;}
 <div class="d-flex flex-center w-100 mt-2">
     <div class="col-md-12 ">
-
-        <!--Card-->
         <div class="card" style="margin-top:80px; margin-bottom:80px;">
             <div class="card-body">
-                <!--Table-->
-                <!--Table head-->
-                <!--Table body-->
-                <!--Table body-->
-                <!--Table-->
-                <!--Card content-->
                 @{
                     if (Session["SearchResults"] == null)
                     {
@@ -26,43 +20,103 @@
                     else
                     {
                         IList<MediaService.MediaWSDTO> media = ((List<MediaService.MediaWSDTO>)Session["SearchResults"]);
-                        <table id="tablePreview" class="table">
-                            <!--Table head-->
-                            <thead>
-                                <tr>
-                                    @{ if (IsAdmin)
+                        if (media.Count <= 0)
+                        {
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong class="pl-2">No results found</strong>
+                                @Html.ActionLink("Search Again", "Search", "Home", new { @class = "btn btn-primary" })
+                            </div>
+                        } else {
+                            <!-- TEST -->
+                            <table id="media" class="table">
+                                <!--Table head-->
+                                <thead>
+                                    <tr>
+                                        @{ if (IsAdmin)
+                                            {
+                                                <th>ID</th>
+                                            }
+                                        }
+                                        <th>Title</th>
+                                        <th>Director</th>
+                                        <th>Genre</th>
+                                        <th>Language</th>
+                                        <th>Budget ($US)</th>
+                                        <th>Release Year</th>
+                                        @{ if (IsAdmin)
+                                            {
+                                                <th scope="row">Admin Actions</th>
+                                            }
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{ for (int i = 0; i < media.Count; i++)
                                         {
-                                            <th>ID</th>
+                                            <tr id="@media[i].MediaID">
+                                                @{ if (IsAdmin)
+                                                    {
+                                                        <td scope="row">@media[i].MediaID</td>
+
+                                                    }
+                                                <td>@media[i].Title</td>
+                                                <td>@media[i].Director.DirectorName</td>
+                                                <td>@media[i].Genre.GenreTitle</td>
+                                                <td>@media[i].Language.LanguageName</td>
+                                                <td>@media[i].Budget <span> ($@media[i].BudgetValue)</span></td>
+                                                <td>@media[i].Year</td>
+                                                }
+
+                                                @{ if (IsAdmin)
+                                                    {
+                                                        <td scope="row">
+                                                            <input type="button" class="w-100 mb-1 btn btn-danger btn-sm" value="Delete" onclick="return deleteMedia(@media[i].MediaID);" />
+                                                            <!-- @Html.ActionLink(linkText: "Update", actionName: "ChangeMedia", routeValues: new { command = "EDIT", MID = media[i].MediaID }, htmlAttributes: new { @class = "w-100 mt-1 btn btn-warning btn-sm", onclick = ("turnToLoad(" + media[i].MediaID + ");") })
+                                                -->
+                                                        </td>
+                                                    }
+                                                }
+                                            </tr>
                                         }
                                     }
-                                    <th>Title</th>
-                                    <th>Director</th>
-                                    <th>Genre</th>
-                                    <th>Language</th>
-                                    <th>Budget ($US)</th>
-                                    <th>Release Year</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{ for (int i = 0; i < media.Count; i++)
-                                    {
-                                        <tr>
-                                            @{ if (IsAdmin)
-                                                {
-                                                    <th scope="row">@media[i].MediaID</th>
-                                                }
-                                            }
-                                            <th>@media[i].Title</th>
-                                            <th>@media[i].Director.DirectorName</th>
-                                            <th>@media[i].Genre.GenreTitle</th>
-                                            <th>@media[i].Language.LanguageName</th>
-                                            <th>@media[i].Budget <span> ($@media[i].BudgetValue)</span></th>
-                                            <th>@media[i].Year</th>
-                                        </tr>
+                                    @{ if (IsAdmin)
+                                        {
+                                            <tr id="insertNew">
+                                                <form class="md-form" id="addMedia" onsubmit="return addMedia(event)">
+
+                                                    <td><i style="color:limegreen;" class="fas fa-plus"></i></td>
+                                                    <td><input name="Title" type="text" class="form-control w-100" /> </td>
+                                                    <td>
+                                                        <select class="browser-default custom-select mb-4 directors" name="Director.DID">
+                                                            <option value="" disabled="" selected="">Loading...</option>
+
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <select class="browser-default custom-select mb-4 genres" name="Genre.GID">
+                                                            <option value="" disabled="" selected="">Loading...</option>
+
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <select class="browser-default custom-select mb-4 languages" name="Language.LID">
+                                                            <option value="" disabled="" selected="">Loading...</option>
+
+                                                        </select>
+                                                    </td>
+                                                    <td><input name="BudgetValue" type="number" class="form-control w-100" /></td>
+                                                    <td><input name="Year" type="number" class="form-control w-100" /></td>
+                                                    <td><input type="submit" class="w-100 mt-1 btn btn-success btn-sm" value="Add" /></td>
+                                                </form>
+                                            </tr>
+
+                                        }
                                     }
-                                }
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+
+                        }
+
                     }
                 }
 
@@ -73,4 +127,64 @@
     <!--/.Card-->
 
 </div>
-                </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+@{
+    if (IsAdmin)
+    {
+        <script>
+            config.useIds = true;
+        </script>
+    }
+}
+<script>
+    var load = `<img src="@Url.Content("~/img/load.gif")" style="width:50px; height:50px" />`;
+
+
+    function deleteMedia(id) {
+        var beforeHtml = $("#" + id).html();
+        $("#" + id).html(load);
+        $.ajax({
+                    type: 'POST',
+            url: "@Url.Action("ChangeMedia", "Home")",
+            datatype: "html",
+            data: { "command" : "DELETE", "MID" : id },
+            success: function (data) {
+                console.log(data);
+                if (data.Success) {
+                    $("#" + id).html(`<tr><td colspan="8"><span class="text-danger mr-2 w-100">Deleted ${data.Affected.Title}</span></td></tr>`);
+                } else {
+                    $("#" + id).html(beforeHtml);
+                    $("#" + id).before(`<tr><td colspan="8"><span class="text-danger mr-2 w-100">Failed to delete ${data.Affected.Title}</span></td></tr>`);
+                }
+            }
+        });
+        return false;s
+    }
+    function addMedia(e) {
+            e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("AddMedia", "Home")",
+            data: $("#addMedia").serialize(),
+            success: function (data) {
+                console.log(data);
+                $("#insertNew").before(`
+                    <tr id="${data.MediaID}">
+                        <td scope="row">${data.MediaID}</td>
+                        <td>${data.Title}</td>
+                        <td>${data.Director.DirectorName}</td>
+                        <td>${data.Genre.GenreTitle}</td>
+                        <td>${data.Language.LanguageName}</td>
+                        <td>${data.Budget} <span> ($${data.BudgetValue})</span></td>
+                        <td>${data.Year}</td>
+
+                        <td scope="row">
+                            <input type="button" class="w-100 mb-1 btn btn-danger btn-sm" value="Delete" onclick="return deleteMedia(${data.MediaID});" />
+                        </td>
+                    </tr>
+                `);
+                }
+        });
+        return false;
+        }
+</script>

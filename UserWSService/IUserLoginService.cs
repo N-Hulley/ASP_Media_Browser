@@ -25,6 +25,7 @@ namespace UserWSService
 
         bool DeleteUser(UserWSDTO user);
 
+        UserWSDTO Translate(ControllerLayer.UserDTO user);
 
 
         // TODO: Add your service operations here

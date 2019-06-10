@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using ControllerLayer;
 
 namespace UserWSService
 {
@@ -49,14 +50,13 @@ namespace UserWSService
 
 
         }
-
-        private UserWSDTO Translate(ControllerLayer.UserDTO user)
+        public UserWSDTO Translate(ControllerLayer.UserDTO user)
         {
             UserWSDTO Output = new UserWSDTO();
             Output.Email = user.Email;
             Output.Username = user.Username;
             Output.UserLevel = user.UserLevel;
-            Output.IsValid = true;
+            Output.IsValid = user.isValid;
             return Output;
         }
     }

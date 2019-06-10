@@ -43,9 +43,9 @@
   <ItemGroup>
     <Compile Include="CrudFunctions.cs" />
     <Compile Include="DTO\DirectorDTO.cs" />
+    <Compile Include="DTO\GenericDTO.cs" />
     <Compile Include="DTO\GenreDTO.cs" />
     <Compile Include="DTO\LanguageDTO.cs" />
-    <Compile Include="Managers\IManageDirectors.cs" />
     <Compile Include="Managers\IManageMediaRecords.cs" />
     <Compile Include="Managers\IManageUserRecords.cs" />
     <Compile Include="DTO\MediaDTO.cs" />

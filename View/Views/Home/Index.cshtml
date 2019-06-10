@@ -12,7 +12,7 @@
     <!--Grid column-->
     <div class="col-md-6 mb-4 white-text text-center text-md-left">
 
-        <h1 class="display-4 font-weight-bold">ASP.NET Media Browser</h1>
+        <h1 class="display-4 font-weight-bold">@if (context.UserLoggedIn()) {<span>Welcome @(((UserWSService.UserWSDTO)Session["ValidUser"]).Username)</span> } else {<span>ASP.NET Media Browser</span>}</h1>
 
         <hr class="hr-light">
 
@@ -25,9 +25,7 @@
         @{
             if (!context.UserLoggedIn())
             {
-                <a target="_blank" href="" class="btn btn-primary">
-                    Register
-                </a>
+                    @Html.ActionLink("Register", "Register", "Home", new { @class = "btn btn-primary" })
             }
             else
             {

@@ -11,6 +11,8 @@ namespace ControllerLayer
         public String Username { get; set; }
         public String Email { get; set; }
         public int UserLevel { get; set; }
+        public bool isValid { get; } = false;
+
 
         /// <summary>
         /// Keep track of information that may be displayed to the user or used for front end processes
@@ -20,6 +22,7 @@ namespace ControllerLayer
         /// <param name="userLevel"></param>
         public UserDTO(Model.UserDTO user)
         {
+            this.isValid = true;
             this.Username = user.UserName;
             this.Email = user.UserEmail;
             this.UserLevel = user.UserLevel;

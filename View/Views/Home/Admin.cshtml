@@ -1,0 +1,38 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="d-flex flex-center w-100">
+    <div class="col-md-12 col-xl-5 mb-4 ">
+
+        <!--Card-->
+        <div class="card">
+
+            <!--Card content-->
+            <div class="card-body w-100">
+
+                <!-- Heading -->
+                <h3 class="dark-grey-text text-center">
+                    <strong>Admin Options</strong>
+                </h3>
+                <hr>
+                @Html.ActionLink("Change Media", "SearchResults", "Home", new { @class = "btn btn-primary blue-gradient w-100" })
+                @Html.ActionLink("View Users", "UserList", "Home", new { @class = "btn btn-primary aqua-gradient w-100" })
+                @Html.ActionLink("Change Directors", "Directors", "Home", new { @class = "btn btn-primary blue-gradient w-100" })
+                @Html.ActionLink("Change Genres", "Genres", "Home", new { @class = "btn btn-primary aqua-gradient w-100" })
+                @Html.ActionLink("Change Languages", "Languages", "Home", new { @class = "btn btn-primary blue-gradient w-100" })
+
+            </div>
+
+        </div>
+        <!--/.Card-->
+
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script>
+
+
+
+</script>

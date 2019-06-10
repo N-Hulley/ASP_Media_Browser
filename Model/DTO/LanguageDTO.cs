@@ -6,20 +6,15 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    public class LanguageDTO
+    public class LanguageDTO : GenericDTO
     {
-        public LanguageDTO(string languageName)
-        {
-            LanguageName = languageName;
-        }
+        public LanguageDTO(string languageName) : base(languageName)
+        { }
 
-        public LanguageDTO(int lID, string languageName)
-        {
-            LID = lID;
-            LanguageName = languageName;
-        }
 
-        public int LID { get; set; }
-        public string LanguageName { get; set; }
+        public LanguageDTO(int lID, string languageName) : base(lID, languageName) { }
+
+        public int LID { get => ID; set => ID = value; }
+        public string LanguageName { get => Name; set => Name = value; }
     }
 }

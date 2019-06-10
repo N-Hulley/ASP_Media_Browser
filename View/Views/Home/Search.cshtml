@@ -1,71 +1,85 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    View.Controllers.HomeController context = new View.Controllers.HomeController();
 }
 @model View.Models.MediaDTO
 
 
-    <div class="d-flex flex-center w-100">
-        <div class="col-md-12 col-xl-5 mb-4 ">
+<div class="d-flex flex-center w-100">
+    <div class="col-md-12 col-xl-5 mb-4 ">
 
-            <!--Card-->
-            <div class="card">
+        <!--Card-->
+        <div class="card">
 
-                <!--Card content-->
-                <div class="card-body">
+            <!--Card content-->
+            <div class="card-body">
 
-                    <!-- Form -->
-                    <div class="text-center w-100">
-                        <div id="showLoad">
-                        </div>
-                    </div>
-                    <div id="formSubmitHide">
-                        @using (Html.BeginForm("SearchMedia", "Home", FormMethod.Post))
-                        {
-                            <!-- Heading -->
-                            <h3 class="dark-grey-text text-center">
-                                <strong>Search For Media</strong>
-                            </h3>
-                            <hr>
-
-                            <div class="md-form">
-                                @Html.TextBoxFor(m => m.Title, null, new { placeholder = "Title", @class = "form-control w-100" })
-                            </div>
-                            <div class="md-form">
-                                @Html.TextBoxFor(m => m.Director, null, new { placeholder = "Director", @class = "form-control w-100" })
-                            </div>
-                            <div class="md-form">
-                                @Html.TextBoxFor(m => m.Language, null, new { placeholder = "Language", @class = "form-control w-100" })
-                            </div>
-                            <div class="md-form">
-                                @Html.TextBoxFor(m => m.Year, null, new { placeholder = "Year", @class = "form-control w-100" })
-                            </div>
-                            <div class="md-form">
-                                @Html.TextBoxFor(m => m.Genre, null, new { placeholder = "Genre", @class = "form-control w-100" })
-                            </div>
-                            <div class="md-form">
-                                @Html.TextBoxFor(m => m.BudgetValue, null, new { placeholder = "Budget ($)", @class = "form-control w-100" })
-                            </div>
-
-
-                            <div class="text-center">
-                                <button type="submit" onclick="hideSearch();" class="btn btn-indigo" id="searchButton">Search</button>
-                                <div class="loadIcon"></div>
-                            </div>
-
-                        }
-                        <!-- Form -->
+                <!-- Form -->
+                <div class="text-center w-100">
+                    <div id="showLoad">
                     </div>
                 </div>
+                <div id="formSubmitHide">
+                    @using (Html.BeginForm("SearchMedia", "Home", FormMethod.Post))
+                    {
+                        <!-- Heading -->
+                        <h3 class="dark-grey-text text-center">
+                            <strong>Search For Media</strong>
+                        </h3>
+                        <hr>
 
+                        <div class="md-form">
+                            @Html.TextBoxFor(m => m.Title, null, new { placeholder = "Title", @class = "form-control w-100" })
+                        </div>
+                        <div class="md-form">
+                            <select class="browser-default custom-select mb-4 genres" name="Genre">
+                                <option value="" disabled="" selected="">Loading...</option>
+
+                            </select>
+                        </div>
+                        <div class="md-form">
+                            <select class="browser-default custom-select mb-4 directors" name="Director">
+                                <option value="" disabled="" selected="">Loading...</option>
+
+                            </select>
+                        </div>
+                        <div class="md-form">
+                            <select class="browser-default custom-select mb-4 languages" name="Language">
+                                <option value="" disabled="" selected="">Loading...</option>
+
+                            </select>
+                        </div>
+                        <div class="md-form">
+                            <input class="form-control w-100" name="Year" placeholder="Year" type="number" />
+                        </div>
+                        <div class="md-form">
+                            <input class="form-control w-100" name="BudgetValue" placeholder="Budget ($)" type="number"/>
+                        </div>
+
+
+                        <div class="text-center">
+                            <button type="submit" onclick="hideSearch();" class="btn btn-indigo" id="searchButton">Search</button>
+                            <div class="loadIcon"></div>
+                        </div>
+
+                    }
+                    <!-- Form -->
+                </div>
             </div>
-            <!--/.Card-->
 
         </div>
+        <!--/.Card-->
+
     </div>
-    <script>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script>
+
     $(".loadIcon").hide();
-    $(".loadIcon").html(`<img src="@Url.Content("~/img/load.gif")" style="width:200px; height:200px" />`);
+    $(".loadIcon").html(`<img src="@Url.Content("~/img/load.gif")" style="width:100px; height:100px" />`);
     function hideSearch() {
+        $(".loadIcon").show();
         $("#searchButton").hide();
     }
-    </script>
+
+</script>

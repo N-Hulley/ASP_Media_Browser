@@ -126,6 +126,10 @@
       <Project>{e44ccd59-f402-4eaf-a6ee-69de6f4b42f5}</Project>
       <Name>Exceptions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UserWSService\UserWSService.csproj">
+      <Project>{4fce3441-4c66-447c-923b-6935cfa80e50}</Project>
+      <Name>UserWSService</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

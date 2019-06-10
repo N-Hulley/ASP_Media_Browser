@@ -12,12 +12,27 @@ namespace MediaService
     [ServiceContract]
     public interface IMediaService
     {
-
+        
 
         [OperationContract]
-        MediaWSDTO AddMedia(MediaWSDTO media);
-        IList<MediaWSDTO> MakeQuery(string title = null, string genre = null, string director = null, string language = null, int? year = null);
+        MediaWSDTO AddMedia(UserWSService.UserWSDTO user, MediaWSDTO media);
+        [OperationContract]
+        bool DeleteMedia(UserWSService.UserWSDTO user, MediaWSDTO media);
+        IList<MediaWSDTO> MakeQuery(UserWSService.UserWSDTO user, string title = null, string genre = null, string director = null, string language = null, int? year = null);
 
+        MediaWSDTO getMediaByID(UserWSService.UserWSDTO user, int iD);
+
+        IList<GenreWSDTO> GetGenres(UserWSService.UserWSDTO user, int? iD = null);
+        IList<DirectorWSDTO> GetDirectors(UserWSService.UserWSDTO user, int? iD = null);
+        IList<LanguageWSDTO> GetLanguages(UserWSService.UserWSDTO user, int? iD = null);
+
+        bool DeleteDirector(UserWSService.UserWSDTO user, int iD);
+        bool DeleteLanguage(UserWSService.UserWSDTO user, int iD);
+        bool DeleteGenre(UserWSService.UserWSDTO user, int iD);
+
+        int AddDirector(UserWSService.UserWSDTO user, string name);
+        int AddLanguage(UserWSService.UserWSDTO user, string name);
+        int AddGenre(UserWSService.UserWSDTO user, string name);
 
         // TODO: Add your service operations here
     }

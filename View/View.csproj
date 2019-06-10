@@ -179,6 +179,7 @@
     <Content Include="font\roboto\Roboto-Thin.ttf" />
     <Content Include="font\roboto\Roboto-Thin.woff" />
     <Content Include="font\roboto\Roboto-Thin.woff2" />
+    <Content Include="img\Swoosh.jpg" />
     <Content Include="img\flags.png" />
     <Content Include="img\lightbox\default-skin.png" />
     <Content Include="img\lightbox\default-skin.svg" />
@@ -256,6 +257,13 @@
     <None Include="packages.config" />
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Home\SearchResults.cshtml" />
+    <Content Include="Views\Home\Register.cshtml" />
+    <Content Include="Views\Home\UserList.cshtml" />
+    <Content Include="Views\Home\Admin.cshtml" />
+    <Content Include="Views\Home\EditMedia.cshtml" />
+    <Content Include="Views\Home\Directors.cshtml" />
+    <Content Include="Views\Home\Genres.cshtml" />
+    <Content Include="Views\Home\Languages.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MediaService\MediaService.csproj">

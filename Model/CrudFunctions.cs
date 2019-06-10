@@ -35,39 +35,47 @@ namespace Model
         }
         public static int Delete(string table, IDictionary<string, object> conditions = null, bool useLike = false)
         {
-            using (SqlConnection connection = OpenConnection())
+            try
             {
-                string sqlWhereFields = conditions.Count > 0 ? " WHERE " : "";
-                for (int i = 0; i < conditions.Count; i++)
+                using (SqlConnection connection = OpenConnection())
                 {
-
-                    bool insertLike = conditions.ElementAt(i).Value is string && useLike;
-                    sqlWhereFields += conditions.ElementAt(i).Key + (insertLike ? " LIKE " : " = ");
-
-
-                    sqlWhereFields += "@" + conditions.ElementAt(i).Key;
-                    //sqlInsertIntoValues += "?";
-                    if (i < conditions.Count - 1)
+                    string sqlWhereFields = conditions.Count > 0 ? " WHERE " : "";
+                    for (int i = 0; i < conditions.Count; i++)
                     {
-                        sqlWhereFields += " AND ";
+
+                        bool insertLike = conditions.ElementAt(i).Value is string && useLike;
+                        sqlWhereFields += conditions.ElementAt(i).Key + (insertLike ? " LIKE " : " = ");
+
+
+                        sqlWhereFields += "@" + conditions.ElementAt(i).Key;
+                        //sqlInsertIntoValues += "?";
+                        if (i < conditions.Count - 1)
+                        {
+                            sqlWhereFields += " AND ";
+                        }
                     }
+
+                    SqlCommand command = connection.CreateCommand();
+
+                    command.CommandText = "DELETE FROM " + table + sqlWhereFields;
+
+                    for (int i = 0; i < conditions.Count; i++)
+                    {
+                        bool insertLike = conditions.ElementAt(i).Value is string && useLike;
+                        object insertString = insertLike ? $"%{(string)conditions.ElementAt(i).Value}%" : conditions.ElementAt(i).Value;
+
+                        command.Parameters.AddWithValue("@" + conditions.ElementAt(i).Key, insertString);
+                    }
+                    int output = command.ExecuteNonQuery();
+                    CloseConnection(connection);
+                    return output;
                 }
-
-                SqlCommand command = connection.CreateCommand();
-
-                command.CommandText = "DELETE FROM " + table + sqlWhereFields;
-
-                for (int i = 0; i < conditions.Count; i++)
-                {
-                    bool insertLike = conditions.ElementAt(i).Value is string && useLike;
-                    string insertString = insertLike ? $"%{(string)conditions.ElementAt(i).Value}%" : (string)conditions.ElementAt(i).Value;
-
-                    command.Parameters.AddWithValue("@" + conditions.ElementAt(i).Key, insertString);
-                }
-                int output = command.ExecuteNonQuery();
-                CloseConnection(connection);
-                return output;
+                } catch (SqlException e)
+            {
+                throw new Exceptions.DatabaseException("Failed to delete from database");
             }
+            
+            
         }
 
         public static DataTable Read(string table, IDictionary<string, object> conditions = null, bool useLike = false)
@@ -127,9 +135,9 @@ namespace Model
 
                     bool isString = values.ElementAt(i).Value is string;
 
-                    if (isString) sqlInsertIntoValues += "'";
+                    if (isString) sqlInsertIntoValues += "";
                     sqlInsertIntoValues +=  "@" + values.ElementAt(i).Key;
-                    if (isString) sqlInsertIntoValues += "'";
+                    if (isString) sqlInsertIntoValues += "";
 
                     //sqlInsertIntoValues += "?";
                     if (i < values.Count - 1)

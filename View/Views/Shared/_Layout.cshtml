@@ -8,7 +8,10 @@
     @Styles.Render("~/css/css")
 </head>
 <body class="p-0">
-
+    <script>
+        var config = {};
+        config.useIds = false;
+    </script>
     <!-- Navbar -->
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
         <div class="container">
@@ -31,16 +34,23 @@
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item @if (View.Controllers.HomeController.currentPage == "Home") { @:active
                         }">
-                        @Html.ActionLink("Home", "Index", "Home", new { @class = "nav-link" })
+                        @Html.ActionLink("Home", "Index", "Home", new { @class = "waves nav-link" })
                     </li>
                     @if (Session["validUser"] != null)
                     {
+                        if (((UserWSService.UserWSDTO)Session["validUser"]).UserLevel >= 3)
+                        {
+                            <li class="nav-item @if (View.Controllers.HomeController.currentPage == "Admin") { @:active
+                        }">
+                                @Html.ActionLink("Admin", "Admin", "Home", new { @class = "waves nav-link" })
+                            </li>
+                        }
                         <li class="nav-item @if (View.Controllers.HomeController.currentPage == "Search") { @:active
                         }">
-                            @Html.ActionLink("Search", "Search", "Home", new { @class = "nav-link" })
+                            @Html.ActionLink("Search", "Search", "Home", new { @class = "waves nav-link" })
                         </li>
                         <li class="nav-item">
-                            @Html.ActionLink("Sign out", "Signout", "User", new { @class = "nav-link" })
+                            @Html.ActionLink("Sign out", "Signout", "User", new { @class = "waves nav-link" })
                         </li>
                     }
 
@@ -51,8 +61,8 @@
         </div>
     </nav>
 
-    <div class="view full-page-intro mt-0 pt-3" style="background-image: url('https://mdbootstrap.com/img/Photos/Others/images/78.jpg'); background-repeat: no-repeat; background-size: cover;">
-        <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+    <div class="min-vh-100 d-flex justify-content-center align-items-center  full-page-intro mt-0 " style="background-image: url('@(Url.Content("~/img/Swoosh.jpg"))'); background-repeat: no-repeat; background-size: cover;">
+        <div class="mask rgba-black-light d-flex justify-content-center align-items-center w-100 min-vh-100">
 
             <!-- Content -->
             <div class="container">
@@ -82,5 +92,60 @@
         }
     }
     @RenderSection("scripts", required: false)
+    <script>
+        
+    $.ajax({
+        type: 'POST',
+        url: "@Url.Action("GetGenres", "Home")",
+        datatype: "html",
+        success: function (data) {
+            console.log(data);
+            $(".genres").html(`<option value="" disabled="" selected="">Genre</option>`);
+            var inputString = '';
+            for (let i = 0; i < data.Response.length; i++) {
+                $(".genres").append(`<option value="${config.useIds ?  data.Response[i].GID : data.Response[i].GenreTitle}">${data.Response[i].GenreTitle}</option>`);
+            }
+        },
+        fail: function (xhr, textStatus, errorThrown) {
+            alert('Failed to get Genres from Database');
+        }
+    });
+
+        $.ajax({
+        type: 'POST',
+        url: "@Url.Action("GetDirectors", "Home")",
+        datatype: "html",
+        success: function (data) {
+            console.log(data);
+            $(".directors").html(`<option value="" disabled="" selected="">Director</option>`);
+            var inputString = '';
+            for (let i = 0; i < data.Response.length; i++) {
+                $(".directors").append(`<option value="${config.useIds ?  data.Response[i].DID : data.Response[i].DirectorName}">${data.Response[i].DirectorName}</option>`);
+            }
+        },
+        fail: function (xhr, textStatus, errorThrown) {
+            alert('Failed to get Directors from Database');
+        }
+        });
+
+        $.ajax({
+        type: 'POST',
+        url: "@Url.Action("GetLanguages", "Home")",
+        datatype: "html",
+        success: function (data) {
+            console.log(data);
+            $(".languages").html(`<option value="" disabled="" selected="">Language</option>`);
+            var inputString = '';
+            for (let i = 0; i < data.Response.length; i++) {
+                $(".languages").append(`<option value="${config.useIds ? data.Response[i].LID : data.Response[i].LanguageName}">${data.Response[i].LanguageName}</option>`);
+            }
+        },
+        fail: function (xhr, textStatus, errorThrown) {
+            alert('Failed to get Languages from Database');
+        }
+        });
+
+
+    </script>
 </body>
 </html>
