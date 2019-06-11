@@ -13,8 +13,31 @@ namespace Model
         
         public DirectorDTO(int dID, string directorName) : base(dID, directorName)
         {}
+        
+        public string DirectorName
+        {
+            get
+            {
+                return Name;
+            }
 
-        public string DirectorName { get => Name; set => Name = value; }
-        public int DID { get => ID; set => ID = value; }
+            set
+            {
+                Name = value;
+            }
+        }
+
+        public int DID
+        {
+            get
+            {
+                return ID;
+            }
+
+            set
+            {
+                ID = value;
+            }
+        }
     }
 }

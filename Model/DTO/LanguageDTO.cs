@@ -13,8 +13,32 @@ namespace Model
 
 
         public LanguageDTO(int lID, string languageName) : base(lID, languageName) { }
+        
 
-        public int LID { get => ID; set => ID = value; }
-        public string LanguageName { get => Name; set => Name = value; }
+        public int LID
+        {
+            get
+            {
+                return ID;
+            }
+
+            set
+            {
+                ID = value;
+            }
+        }
+
+        public string LanguageName
+        {
+            get
+            {
+                return Name;
+            }
+
+            set
+            {
+                Name = value;
+            }
+        }
     }
 }

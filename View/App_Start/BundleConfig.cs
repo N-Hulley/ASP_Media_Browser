@@ -10,12 +10,15 @@ namespace View
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/js/jquery-3.4.1.min.js"));
+            bundles.Add(new ScriptBundle("~/bundles/popper").Include(
+                      "~/js/popper.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/js/bootstrap.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/mdb").Include(
                       "~/js/mdb.min.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/fa").Include(
                       "~/js/all.js", "~/js/fontawesome.js"));
 

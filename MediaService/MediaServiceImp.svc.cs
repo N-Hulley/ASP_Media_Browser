@@ -25,22 +25,22 @@ namespace MediaService
                 if (
                     media.Genre != null &&
                     media.Genre.GID != null &&
-                    media.Title != null && 
-                    media.Year != null &&
+                    media.Title != null &&
                     media.Language != null &&
                     media.Language.LID != null &&
-                    media.Director != null && 
-                    media.Director.DID != null &&
-                    media.BudgetValue != null
+                    media.Director != null &&
+                    media.Director.DID != null
                     )
                 {
-                    return Translate(Manager.CreateMedia(Translate(media))); 
-                } else
+                    return Translate(Manager.CreateMedia(Translate(media)));
+                }
+                else
                 {
                     throw new System.Web.HttpRequestValidationException("Not enough information given");
 
                 }
-            } else
+            }
+            else
             {
                 throw new System.Web.HttpRequestValidationException("Invalid user");
             }
@@ -56,7 +56,7 @@ namespace MediaService
 
         public MediaWSDTO getMediaByID(UserWSDTO user, int iD)
         {
-            if (user.IsValid && user.UserLevel >= AdminLevel)
+            if (user.IsValid && user.UserLevel >= 1)
                 return Translate(Manager.FindByID(iD));
             else
                 throw new System.Web.HttpRequestValidationException("Invalid user");
@@ -72,7 +72,7 @@ namespace MediaService
 
         public ControllerLayer.MediaDTO Translate(MediaWSDTO media)
         {
-            if (media.Title != null && media.BudgetValue != null && media.Director != null && media.Genre != null && media.Language != null && media.Year != null)
+            if (media.Title != null && media.Director != null && media.Genre != null && media.Language != null)
                 return new ControllerLayer.MediaDTO(
                     media.Title,
                     Translate(media.Genre),
@@ -85,7 +85,8 @@ namespace MediaService
 
             throw new System.Web.HttpRequestValidationException("Invalid media given");
         }
-        public ControllerLayer.LanguageDTO Translate(LanguageWSDTO language) {
+        public ControllerLayer.LanguageDTO Translate(LanguageWSDTO language)
+        {
             if (language.LID != null || language.LanguageName != null)
                 return new ControllerLayer.LanguageDTO((int)language.LID, language.LanguageName);
 
@@ -147,6 +148,18 @@ namespace MediaService
             LanguageWSDTO Output = new LanguageWSDTO();
             Output.LID = director.LID;
             Output.LanguageName = director.LanguageName;
+            return Output;
+        }
+        public BorrowDTO Translate(ControllerLayer.BorrowDTO borrow)
+        {
+            BorrowDTO Output = new BorrowDTO();
+            Output.BID = borrow.BID;
+            Output.BorrowDate = borrow.BorrowDate;
+            Output.ActualReturnDate = borrow.ActualReturnDate;
+            Output.LateFee = borrow.LateFee;
+            Output.MediaID = borrow.MediaID;
+            Output.ReturnDate = borrow.ReturnDate;
+            Output.UID = borrow.UID;
             return Output;
         }
 
@@ -249,6 +262,103 @@ namespace MediaService
                 return Manager.AddGenere(name);
             }
             throw new System.Web.HttpRequestValidationException("Invalid user");
+        }
+        public ControllerLayer.ReserveDTO Translate(ReserveDTO reserve)
+        {
+            try
+            {
+                if (reserve.RID == null)
+                {
+                    return new ControllerLayer.ReserveDTO(
+                        reserve.UID,
+                        reserve.MediaID,
+                        reserve.ReservedDate
+                    );
+                }
+                else
+                {
+                    return new ControllerLayer.ReserveDTO((int)reserve.RID);
+                }
+
+            }
+            catch (Exceptions.ValidationException e)
+            {
+                throw new System.Web.HttpParseException(e.Message);
+            }
+        }
+        public ControllerLayer.BorrowDTO Translate(BorrowDTO borrow)
+        {
+            try
+            {
+                if (borrow.BID == null)
+                {
+                    return new ControllerLayer.BorrowDTO(borrow.UID, borrow.MediaID);
+                }
+                else
+                {
+                    return new ControllerLayer.BorrowDTO((int)borrow.BID);
+                }
+            }
+            catch (Exceptions.ValidationException e)
+            {
+                throw new System.Web.HttpParseException(e.Message);
+            }
+        }
+
+        public int AddBorrowed(UserWSDTO user, BorrowDTO record)
+        {
+            if (user != null && user.IsValid)
+            {
+                return Manager.AddBorrowed(Translate(record));
+            }
+            throw new System.Web.HttpRequestValidationException("Invalid user");
+        }
+
+        public int AddReserved(UserWSDTO user, ReserveDTO record)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<BorrowDTO> GetBorrowed(UserWSDTO user, int? bID = default(int?), int? uID = default(int?), int? MediaID = default(int?))
+        {
+
+            if (user != null && user.IsValid)
+            {
+                IList<BorrowDTO> Output = new List<BorrowDTO>();
+                IList<ControllerLayer.BorrowDTO> Result;
+                
+                Result = Manager.GetBorrowed(bID, uID, MediaID);
+
+                for (int i = 0; i < Result.Count; i++)
+                {
+                    Output.Add(Translate(Result[i]));
+                }
+
+                return Output;
+            }
+            throw new System.Web.HttpRequestValidationException("Invalid user");
+        }
+
+        public IList<ReserveDTO> GetReserved(UserWSDTO user, int? rID = default(int?), int? uID = default(int?), int? MediaID = default(int?))
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteBorrowed(UserWSDTO user, int? iD)
+        {
+            if (iD != null)
+            {
+                if (user.IsValid && user.UserLevel >= AdminLevel)
+                {
+                    return Manager.DeleteBorrowed((int)iD);
+                }
+            }
+            return false;
+        }
+
+        public bool DeleteReserve(UserWSDTO user, int? iD)
+        {
+            throw new NotImplementedException();
         }
     }
 }

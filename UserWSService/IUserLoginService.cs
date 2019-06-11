@@ -87,6 +87,10 @@ namespace UserWSService
         }
 
         [DataMember]
-        public int? UID { get => uID; set => uID = value; }
+        public int? UID
+        {
+            set { uID = value; }
+            get { return uID; }
+        }
     }
 }

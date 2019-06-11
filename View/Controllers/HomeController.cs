@@ -93,6 +93,20 @@ namespace View.Controllers
 
             return View("Register");
         }
+        public ActionResult Borrowed()
+        {
+            ViewBag.Message = "Borrowed";
+            currentPage = "Borrowed";
+
+            return View("Borrowed");
+        }
+        public ActionResult Reserved()
+        {
+            ViewBag.Message = "Reserved";
+            currentPage = "Reserved";
+
+            return View("Reserved");
+        }
         public ActionResult RegisterAccount(View.Models.UserDTO user)
         {
             try
@@ -249,6 +263,38 @@ namespace View.Controllers
             result["Response"] = LoginService.GetUsers(GetUser());
             return Json(result);
         }
+        public JsonResult GetBorrowed(int? bID, int? uID, int? mediaID)
+        {
+            IDictionary<string, object> result = new Dictionary<string, object>();
+            if (!IsAdmin() && mediaID == null) uID = GetUser().UID;
+            result["Response"] = MediaManager.GetBorrowed(GetUser(), bID, uID, mediaID);
+            return Json(result);
+        }
+        public JsonResult DeleteBorrowed(int? BID)
+        {
+            IDictionary<string, object> result = new Dictionary<string, object>();
+            if (IsAdmin())
+                result["Response"] = MediaManager.DeleteBorrowed(GetUser(), BID);
+            return Json(result);
+        }
+        public JsonResult BorrowMedia(string mediaID)
+        {
+            IDictionary<string, object> result = new Dictionary<string, object>();
+            result["Response"] = false;
+
+            if (mediaID == null) { return Json(result); }
+
+            int id;
+            if (Int32.TryParse(mediaID, out id))
+            {
+                MediaService.MediaWSDTO media = MediaManager.getMediaByID(GetUser(), id);
+                MediaService.BorrowDTO borrow = new MediaService.BorrowDTO();
+                borrow.UID = GetUser().UID;
+                borrow.MediaID = media.MediaID;
+                result["Response"] = MediaManager.AddBorrowed(GetUser(), borrow) > 0;
+            }
+            return Json(result);
+        }
         public ActionResult Directors()
         {
             if (IsAdmin())
@@ -273,7 +319,6 @@ namespace View.Controllers
             }
             return Index();
         }
-
         public JsonResult AddField(string name, string currentType)
         {
             if (IsAdmin())
@@ -340,6 +385,7 @@ namespace View.Controllers
                 } catch (Exception e)
                 {
                     result["Success"] = false;
+                    result["Response"] = e.Message;
                     return Json(result);
                 }
                 

@@ -12,7 +12,17 @@ namespace ControllerLayer
         const int AdminLevel = 3;
         private readonly Model.IManageMediaRecords RecordManager = new Model.ManageMediaRecordsImp();
         private readonly Model.IManageUserRecords UserManager = new Model.ManageUserRecordsImp();
+        const decimal LateFeePerDay = 5;
 
+        public int AddBorrowed(BorrowDTO record)
+        {
+            Model.BorrowDTO ModelDto = new Model.BorrowDTO();
+            ModelDto.MediaID = record.MediaID;
+            ModelDto.ReturnDate = record.ReturnDate;
+            ModelDto.UID = record.UID;
+            ModelDto.BorrowDate = record.BorrowDate;
+            return RecordManager.AddBorrowed(ModelDto);
+        }
 
         public int AddDirector(string name)
         {
@@ -29,12 +39,33 @@ namespace ControllerLayer
             return RecordManager.AddLanguage(name);
         }
 
-        public MediaDTO ChangeMedia(MediaDTO media, string field, object newValue)
+        public int AddReserved(ReserveDTO record)
         {
-            if (field == "Title" && newValue is string)
+            throw new NotImplementedException();
+        }
+
+        public MediaDTO ChangeMedia(MediaDTO media)
+        {
+            string field;
+            object newValue;
+            MediaDTO oldMedia = new MediaDTO(RecordManager.FindByID(media.MediaID));
+            if (media.Title != oldMedia.Title)
             {
+                field = "Title";
+                newValue = media.Title;
                 RecordManager.ChangeRecord(media.Translate(), field, newValue);
-                media.Title = ((string)newValue);
+            }
+            if (media.Genre.GID != oldMedia.Genre.GID)
+            {
+                field = "Title";
+                newValue = media.Title;
+                RecordManager.ChangeRecord(media.Translate(), field, newValue);
+            }
+            if (media.Title != oldMedia.Title)
+            {
+                field = "Title";
+                newValue = media.Title;
+                RecordManager.ChangeRecord(media.Translate(), field, newValue);
             }
             if (field == "Genre" && newValue is int)
             {
@@ -91,12 +122,42 @@ namespace ControllerLayer
             return false;
         }
 
+        public bool DeleteReserved(int iD)
+        {
+            return RecordManager.DeleteReserved(iD);
+        }
+
         public MediaDTO FindByID(int iD)
         {
             return new MediaDTO(RecordManager.FindByID(iD));
 
         }
 
+        public IList<BorrowDTO> GetBorrowed(int? bID = null, int? uID = null, int? MediaID = null)
+        {
+            IList<Model.BorrowDTO> response = (RecordManager.GetBorrowed(bID, uID, MediaID));
+            IList<BorrowDTO> translated = new List<BorrowDTO>();
+            for (int i = 0; i < response.Count; i++)
+            {
+                BorrowDTO current = Translate(response[i]);
+                current.LateFee = current.ReturnDate.Subtract(current.ActualReturnDate).Days * LateFeePerDay;
+                translated.Add(current);
+                
+            }
+            return translated;
+        }
+        public BorrowDTO Translate(Model.BorrowDTO input)
+        {
+            BorrowDTO Output = new BorrowDTO();
+            Output.BID = input.BID;
+            Output.UID = input.UID;
+            Output.MediaID = input.MediaID;
+            Output.BorrowDate = input.BorrowDate;
+            Output.ReturnDate = input.ReturnDate;
+            Output.ActualReturnDate = input.ActualReturnDate;
+            Output.LateFee = input.LateFee;
+            return Output;
+        }
         public IList<DirectorDTO> GetDirectors(int? iD = null)
         {
             IList<Model.DirectorDTO> response = (RecordManager.GetDirectors(iD));
@@ -130,6 +191,11 @@ namespace ControllerLayer
             return translated;
         }
 
+        public IList<BorrowDTO> GetReserved(int? rID = null, int? uID = null, int? MediaID = null)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Makes a call to the model for any media matching the inputs.
         /// If inputs are null they are not included.
@@ -161,6 +227,15 @@ namespace ControllerLayer
             }
             return Output;
         }
-       
+
+        public BorrowDTO ReturnBorrowed(BorrowDTO record)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteBorrowed(int iD)
+        {
+            return RecordManager.DeleteBorrowed(iD);
+        }
     }
 }

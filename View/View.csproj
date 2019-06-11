@@ -257,13 +257,13 @@
     <None Include="packages.config" />
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Home\SearchResults.cshtml" />
-    <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Home\UserList.cshtml" />
     <Content Include="Views\Home\Admin.cshtml" />
     <Content Include="Views\Home\EditMedia.cshtml" />
     <Content Include="Views\Home\Directors.cshtml" />
     <Content Include="Views\Home\Genres.cshtml" />
     <Content Include="Views\Home\Languages.cshtml" />
+    <Content Include="Views\Home\Borrowed.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MediaService\MediaService.csproj">

@@ -8,8 +8,32 @@ namespace Model
 {
     public class GenreDTO : GenericDTO
     {
-        public int GID { get => ID; set => ID = value; }
-        public string GenreName { get => Name; set => Name = value; }
+
+        public int GID
+        {
+            get
+            {
+                return ID;
+            }
+
+            set
+            {
+                ID = value;
+            }
+        }
+
+        public string GenreName
+        {
+            get
+            {
+                return Name;
+            }
+
+            set
+            {
+                Name = value;
+            }
+        }
 
         public GenreDTO(int gID, string genreName) : base(gID, genreName)
         {}

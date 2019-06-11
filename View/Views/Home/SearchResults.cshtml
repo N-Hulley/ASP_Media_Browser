@@ -2,7 +2,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     View.Controllers.HomeController context = new View.Controllers.HomeController();
 }
-
+@section scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/popper")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/mdb")
+}
 @model MediaService.MediaWSDTO
 
 
@@ -43,6 +48,7 @@
                                         <th>Language</th>
                                         <th>Budget ($US)</th>
                                         <th>Release Year</th>
+                                        <th>Actions</th>
                                         @{ if (IsAdmin)
                                             {
                                                 <th scope="row">Admin Actions</th>
@@ -53,7 +59,7 @@
                                 <tbody>
                                     @{ for (int i = 0; i < media.Count; i++)
                                         {
-                                            <tr id="@media[i].MediaID">
+                                            <tr id="@media[i].MediaID" class="media-item">
                                                 @{ if (IsAdmin)
                                                     {
                                                         <td scope="row">@media[i].MediaID</td>
@@ -65,14 +71,16 @@
                                                 <td>@media[i].Language.LanguageName</td>
                                                 <td>@media[i].Budget <span> ($@media[i].BudgetValue)</span></td>
                                                 <td>@media[i].Year</td>
+                                                <td class="borrow reserve" id="">
+                                                    
+                                                </td>
                                                 }
 
                                                 @{ if (IsAdmin)
                                                     {
-                                                        <td scope="row">
+                                                        <td>
                                                             <input type="button" class="w-100 mb-1 btn btn-danger btn-sm" value="Delete" onclick="return deleteMedia(@media[i].MediaID);" />
-                                                            <!-- @Html.ActionLink(linkText: "Update", actionName: "ChangeMedia", routeValues: new { command = "EDIT", MID = media[i].MediaID }, htmlAttributes: new { @class = "w-100 mt-1 btn btn-warning btn-sm", onclick = ("turnToLoad(" + media[i].MediaID + ");") })
-                                                -->
+                                                            <input type="button" class="w-100 mb-1 btn btn-warning btn-sm" value="Edit" onclick="return editMedia(@media[i].MediaID);" />
                                                         </td>
                                                     }
                                                 }
@@ -85,7 +93,7 @@
                                                 <form class="md-form" id="addMedia" onsubmit="return addMedia(event)">
 
                                                     <td><i style="color:limegreen;" class="fas fa-plus"></i></td>
-                                                    <td><input name="Title" type="text" class="form-control w-100" /> </td>
+                                                    <td><input name="Title" placeholder="Title" type="text" class="form-control w-100" /> </td>
                                                     <td>
                                                         <select class="browser-default custom-select mb-4 directors" name="Director.DID">
                                                             <option value="" disabled="" selected="">Loading...</option>
@@ -104,9 +112,9 @@
 
                                                         </select>
                                                     </td>
-                                                    <td><input name="BudgetValue" type="number" class="form-control w-100" /></td>
-                                                    <td><input name="Year" type="number" class="form-control w-100" /></td>
-                                                    <td><input type="submit" class="w-100 mt-1 btn btn-success btn-sm" value="Add" /></td>
+                                                    <td><input placeholder="Budget" name="BudgetValue" type="number" class="form-control w-100" /></td>
+                                                    <td><input placeholder="Year" name="Year" type="number" class="form-control w-100" /></td>
+                                                    <td colspan="2"><input type="submit" class="w-100 mt-1 btn btn-success btn-sm" value="Add"  /></td>
                                                 </form>
                                             </tr>
 
@@ -127,7 +135,6 @@
     <!--/.Card-->
 
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 @{
     if (IsAdmin)
     {
@@ -141,6 +148,7 @@
 
 
     function deleteMedia(id) {
+        $("#borrow-" + id).hide();
         var beforeHtml = $("#" + id).html();
         $("#" + id).html(load);
         $.ajax({
@@ -151,14 +159,47 @@
             success: function (data) {
                 console.log(data);
                 if (data.Success) {
-                    $("#" + id).html(`<tr><td colspan="8"><span class="text-danger mr-2 w-100">Deleted ${data.Affected.Title}</span></td></tr>`);
+                    $("#" + id).html(`<td colspan="9"><span class="text-danger mr-2 w-100">Deleted ${data.Affected.Title}</span></td>`);
                 } else {
                     $("#" + id).html(beforeHtml);
-                    $("#" + id).before(`<tr><td colspan="8"><span class="text-danger mr-2 w-100">Failed to delete ${data.Affected.Title}</span></td></tr>`);
+                    $("#" + id).before(`<td colspan="9"><span class="text-danger mr-2 w-100">Failed to delete ${data.Affected.Title}</span></td>`);
                 }
             }
         });
         return false;s
+    }
+    function borrowMedia(id) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("BorrowMedia", "Home")",
+            data: { "mediaID": id },
+            success: function (data) {
+                console.log(data);
+                if (data)
+                    $("#" + id + " .borrow").html(`<span class="badge badge-primary text-wrap">Borrowed</span>`);
+            }
+    });
+    return false;
+    }
+
+    function applyBorrow() {
+        var media = $(".media-item");
+        for (let i = 0; i < media.length; i++) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetBorrowed", "Home")",
+                datatype: "html",
+                data: { "bID": null, "uID": null, "mediaID": media[i].id },
+                success: function (data) {
+                    console.log(media[i].id,data);
+                    if (data.Response.length <= 0) {
+                        $("#" + media[i].id + " .borrow").append(`<input type="button" class="w-100 mb-1 btn btn-secondary btn-sm" value="Borrow" onclick="return borrowMedia(${media[i].id});" />`);
+                    } else {
+                        $("#" + media[i].id + " .borrow").append(`<input type="button" class="w-100 mb-1 btn btn-secondary btn-sm " value="No Stock" disabled />`);
+                    }
+            }
+        });
+        }
     }
     function addMedia(e) {
             e.preventDefault();
@@ -186,5 +227,6 @@
                 }
         });
         return false;
-        }
+    }
+    applyBorrow();
 </script>

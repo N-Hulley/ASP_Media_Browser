@@ -70,7 +70,7 @@ namespace Model
                     CloseConnection(connection);
                     return output;
                 }
-                } catch (SqlException e)
+                } catch (SqlException)
             {
                 throw new Exceptions.DatabaseException("Failed to delete from database");
             }

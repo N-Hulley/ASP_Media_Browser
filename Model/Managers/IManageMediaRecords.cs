@@ -33,5 +33,15 @@ namespace Model
         int AddLanguage(string name);
         int AddGenre(string name);
 
+        IList<BorrowDTO> GetBorrowed(int? bID = null, int? uID = null, int? MediaID = null);
+        IList<BorrowDTO> GetReserved(int? rID = null, int? uID = null, int? MediaID = null);
+
+        int AddBorrowed(BorrowDTO record);
+        int AddReserved(ReserveDTO record);
+
+        BorrowDTO ReturnBorrowed(BorrowDTO record);
+        bool DeleteReserved(int iD);
+        bool DeleteBorrowed(int iD);
+
     }
 }

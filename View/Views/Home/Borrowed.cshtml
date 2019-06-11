@@ -1,0 +1,150 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/popper")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/mdb")
+}
+
+@{bool IsAdmin = Session["ValidUser"] == null ? false : ((UserWSService.UserWSDTO)(Session["ValidUser"])).UserLevel >= 3 ? true : false;}
+<div class="d-flex flex-center w-100 mt-2">
+    <div class="col-md-12 ">
+
+        <!--Card-->
+        <div class="card" style="margin-top:80px; margin-bottom:80px;">
+            <div class="card-body">
+                <table id="media" class="table">
+                    <!--Table head-->
+                    <thead>
+                        <tr>
+
+                            @{if (IsAdmin)
+                                {<th>ID</th>}
+                            }                  
+                            <th>User</th>
+                            <th>MediaID</th>
+                            <th>BorrowDate</th>
+                            <th>ReturnDate</th>
+                            <th>ActualReturnDate</th>
+                            <th>LateFee</th>
+                            @{if (IsAdmin)
+                                {<th>Admin Actions</th>}
+                                }
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr id="insertNew">
+                            @{if (IsAdmin)
+                                {
+                                    <!--
+                    <form class="md-form" id="add" onsubmit="return addField(event)">
+                        <td><i style="color:limegreen;" class="fas fa-plus"></i></td>
+                        <td><input name="" id="name" type="text" class="form-control w-100" /></td>
+                        <td><input name="" id="level" type="text" class="form-control w-100" /></td>
+                        <td><input name="" id="email" type="text" class="form-control w-100" /></td>
+                        <td><input type="submit" class="w-100 mt-1 btn btn-success btn-sm" value="Add" /></td>
+                    </form>
+                -->
+                                } }
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+    </div>
+    <!--/.Card-->
+
+</div>
+<script>
+    config.useIds = true;
+    var load = `<img src="@Url.Content("~/img/load.gif")" style="width:50px; height:50px" />`;
+
+    function dateTranslate(date) {
+        var milli = date.replace(/\/Date\((-?\d+)\)\//, '$1');
+        return new Date(parseInt(milli));
+    }
+
+
+    $.ajax({
+        type: 'POST',
+        url: "@Url.Action("GetBorrowed", "Home")",
+        datatype: "html",
+        data: { "bID": null, "uID": null, "mediaID": null },
+        success: function (data) {
+            console.log(data);
+            for (let i = 0; i < data.Response.length; i++) {
+                var returned = (dateTranslate(data.Response[i].ActualReturnDate).getTime()) > (dateTranslate(data.Response[i].BorrowDate).getTime());
+                $("#insertNew").before(
+                    `
+                    <tr id="${data.Response[i].BID}" >
+                        @{
+                            if (IsAdmin)
+                            {
+                        <td>
+                            ${data.Response[i].BID}
+                        </td>
+                                }
+                            }
+                        <td>
+                            ${data.Response[i].UID}
+                        </td>
+                        <td>
+                            ${data.Response[i].MediaID}
+                        </td>
+                        <td>
+                            ${dateTranslate(data.Response[i].BorrowDate).getDate()}/${dateTranslate(data.Response[i].BorrowDate).getMonth()}/${dateTranslate(data.Response[i].BorrowDate).getFullYear()}
+                        </td>
+                        <td>
+                            ${dateTranslate(data.Response[i].ReturnDate).getDate()}/${dateTranslate(data.Response[i].ReturnDate).getMonth()}/${dateTranslate(data.Response[i].ReturnDate).getFullYear()}
+                        </td>
+                        <td>
+                        ${!returned ? "Not returned" : (dateTranslate(data.Response[i].ActualReturnDate).getDate() + "/" + dateTranslate(data.Response[i].ActualReturnDate).getMonth() + "/" + dateTranslate(data.Response[i].ActualReturnDate).getFullYear())}
+                        </td>
+                        <td>
+                            ${returned ? "$ " + data.Response[i].LateFee : ""}
+                        </td>
+                        @{
+                            if (IsAdmin) {
+                        <td>
+                            <input type="button" class="w-100 mb-1 btn btn-danger btn-sm" value="Delete" onclick="return deleteField(${data.Response[i].BID});" />
+                        </td>
+                            }
+                        }
+
+                    </tr>
+                `
+                );
+            }
+        },
+        fail: function (xhr, textStatus, errorThrown) {
+            alert('Failed to get Users from Database');
+        }
+    });
+
+    function deleteField(id) {
+        var beforeHtml = $("#" + id).html();
+        $("#" + id).html(load);
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("DeleteBorrowed", "Home")",
+            datatype: "html",
+            data: { "BID" : id },
+            success: function (data) {
+                console.log(data);
+                if (data.Response) {
+                    $("#" + id).html(`<td colspan="8"><span class="text-danger mr-2 w-100">Deleted</span></td>`);
+                } else {
+                    $("#" + id).html(beforeHtml);
+                    $("#" + id).before(`<td colspan="8"><span class="text-danger mr-2 w-100">Failed to delete</span></td>`);
+                }
+            }
+        });
+        return false;
+    }
+</script>

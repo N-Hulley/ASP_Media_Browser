@@ -1,7 +1,12 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@section scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/popper")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/mdb")
+}
 
 @{bool IsAdmin = Session["ValidUser"] == null ? false : ((UserWSService.UserWSDTO)(Session["ValidUser"])).UserLevel >= 3 ? true : false;}
 <div class="d-flex flex-center w-100 mt-2">

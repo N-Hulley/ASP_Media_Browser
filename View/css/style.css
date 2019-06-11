@@ -118,3 +118,20 @@ body,
 .near-moon-gradient {
     background-image: linear-gradient(to bottom, #5ee7df 0%, #b490ca 100%);
 }
+@keyframes example {
+  0%   {background-color:red; left:0px; top:0px;transform: rotate(0deg);}
+  25%  {background-color:yellow; left:200px; top:0px;transform: rotate(90deg);}
+  50%  {background-color:blue; left:200px; top:200px;transform: rotate(180deg);}
+  75%  {background-color:green; left:0px; top:200px;transform: rotate(270deg);}
+  100% {background-color:red; left:0px; top:0px;transform: rotate(360deg);}
+}
+.party {
+      animation-name: example;
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+}
+span {
+    display: inline-block !important;
+    width:100%;
+}

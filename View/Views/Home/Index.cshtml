@@ -4,7 +4,12 @@
 
 }
 @model View.Models.UserDTO
-
+@section scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/popper")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/mdb")
+}
 
 <!--Grid row-->
 <div class="row wow fadeIn">

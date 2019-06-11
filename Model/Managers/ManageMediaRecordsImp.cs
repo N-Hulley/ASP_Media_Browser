@@ -14,6 +14,16 @@ namespace Model
         private readonly static string genre = "TabGenre";
         private readonly static string language = "TabLanguage";
         private readonly static string view = "ViewMedia";
+        private readonly static string borrow = "TabBorrow";
+        private readonly static string reserved = "TabReserved";
+
+
+        /// <summary>
+        /// INSERT INTO TabReserved (UID, MediaID, ReservedDate) Values ( 1, 1, '2019-06-22 12:12:12.000')
+        /// </summary>
+        /// <param name="record"></param>
+        /// <returns></returns>
+
         public MediaDTO AddRecord(MediaDTO record)
         {
             IDictionary<string, object> values = new Dictionary<string, object>();
@@ -141,6 +151,28 @@ namespace Model
             ); ;
         }
 
+        IList<BorrowDTO> TranslateBorrowed(DataTable records)
+        {
+            IList<BorrowDTO> DTOs = new List<BorrowDTO>();
+            foreach (DataRow row in records.Rows)
+            {
+                DTOs.Add(TranslateBorrowed(row));
+            }
+            return DTOs;
+        }
+        BorrowDTO TranslateBorrowed(DataRow record)
+        {
+            BorrowDTO Output = new BorrowDTO();
+            Output.BID = record.Field<int>("BID");
+            Output.UID = record.Field<int>("UID");
+            Output.MediaID = record.Field<int>("MediaID");
+            Output.BorrowDate = (record.Field<DateTime>("BorrowDate"));
+            Output.ReturnDate = (record.Field<DateTime>("ReturnDate"));
+            Output.ActualReturnDate = (record.Field<DateTime>("ActualReturnDate"));
+
+            return Output;
+        }
+
         public bool DeleteDirector(int iD)
         {
             IDictionary<string, object> conditions = new Dictionary<string, object>();
@@ -181,6 +213,67 @@ namespace Model
             IDictionary<string, object> conditions = new Dictionary<string, object>();
             conditions["GenreName"] = name;
             return CrudFunctions.Create("GID", conditions, genre);
+        }
+
+        public IList<BorrowDTO> GetBorrowed(int? bID = null, int? uID = null, int? MediaID = null)
+        {
+            IDictionary<string, object> conditions = new Dictionary<string, object>();
+
+            if (bID != null) { conditions["BID"] = bID; } 
+            if (uID != null) { conditions["UID"] = uID; } 
+            if (MediaID != null) { conditions["MediaID"] = MediaID; } 
+
+            if (conditions.Count <= 0)
+            {
+                conditions["1"] = 1;
+            }
+
+            return (IList<BorrowDTO>)TranslateBorrowed(CrudFunctions.Read(borrow, conditions));
+        }
+
+        public IList<BorrowDTO> GetReserved(int? iD = default(int?))
+        {
+            throw new NotImplementedException();
+        }
+
+        public int AddBorrowed(BorrowDTO record)
+        {
+            IDictionary<string, object> conditions = new Dictionary<string, object>();
+            conditions["UID"] = record.UID;
+            conditions["MediaID"] = record.MediaID;
+            conditions["BorrowDate"] = record.BorrowDate;
+            conditions["ReturnDate"] = record.ReturnDate;
+            return CrudFunctions.Create("BID", conditions, borrow);
+        }
+
+        public int AddReserved(ReserveDTO record)
+        {
+            throw new NotImplementedException();
+        }
+
+        public BorrowDTO ReturnBorrowed(BorrowDTO record)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteReserved(int iD)
+        {
+            IDictionary<string, object> conditions = new Dictionary<string, object>();
+            conditions["RID"] = iD;
+            return CrudFunctions.Delete(reserved, conditions) > 0;
+        }
+
+        public IList<BorrowDTO> GetReserved(int? rID = default(int?), int? uID = default(int?), int? MediaID = default(int?))
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteBorrowed(int iD)
+        {
+            IDictionary<string, object> conditions = new Dictionary<string, object>();
+            conditions["BID"] = iD;
+            return CrudFunctions.Delete(borrow, conditions) > 0;
+
         }
     }
 }
